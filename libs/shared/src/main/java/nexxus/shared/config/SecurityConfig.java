@@ -28,8 +28,11 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 @EnableConfigurationProperties(Auth0Properties.class)
 public class SecurityConfig {
 
-  @Value("${frontend.origin:http://localhost:5173}")
+  @Value("${frontend.origin}")
   private String frontendOrigin;
+
+  @Value("${api.prefix}")
+  private String apiPrefix;
 
   @Bean
   public SecurityWebFilterChain springSecurityFilterChain(
@@ -48,10 +51,10 @@ public class SecurityConfig {
                         "/swagger-ui.html",
                         "/swagger-ui/**",
                         "/webjars/**",
-                        "/api/v1/auth/login",
-                        "/api/v1/auth/logout",
-                        "/api/v1/auth/callback",
-                        "/api/v1/auth/config")
+                        apiPrefix + "/auth/login",
+                        apiPrefix + "/auth/logout",
+                        apiPrefix + "/auth/callback",
+                        apiPrefix + "/auth/config")
                     .permitAll()
                     // All others must be authenticated
                     .anyExchange()

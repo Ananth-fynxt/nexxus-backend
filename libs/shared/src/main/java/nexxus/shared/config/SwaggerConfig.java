@@ -3,6 +3,7 @@ package nexxus.shared.config;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -98,9 +99,11 @@ public class SwaggerConfig {
   }
 
   private Components createComponents() {
-    return new Components()
-        .addSecuritySchemes("bearerAuth", createBearerAuth())
-        .addSecuritySchemes("oauth2", createAuth0OAuth2());
+    Components components = new Components().addSecuritySchemes("bearerAuth", createBearerAuth());
+    if (StringUtils.hasText(auth0Domain)) {
+      components.addSecuritySchemes("oauth2", createAuth0OAuth2());
+    }
+    return components;
   }
 
   private SecurityScheme createBearerAuth() {
@@ -133,8 +136,10 @@ public class SwaggerConfig {
   }
 
   private SecurityRequirement createSecurityRequirement() {
-    return new SecurityRequirement()
-        .addList("bearerAuth")
-        .addList("oauth2", List.of("openid", "profile", "email"));
+    SecurityRequirement requirement = new SecurityRequirement().addList("bearerAuth");
+    if (StringUtils.hasText(auth0Domain)) {
+      requirement.addList("oauth2", List.of("openid", "profile", "email"));
+    }
+    return requirement;
   }
 }
