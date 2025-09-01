@@ -1,4 +1,4 @@
-package nexxus.shared;
+package nexxus.shared.service.impl;
 
 import java.util.List;
 

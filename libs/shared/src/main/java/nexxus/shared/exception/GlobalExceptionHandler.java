@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.naming.ServiceUnavailableException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -40,7 +39,11 @@ import nexxus.shared.util.ReactiveResponseHandler;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-  @Autowired private ReactiveResponseHandler responseHandler;
+  private final ReactiveResponseHandler responseHandler;
+
+  public GlobalExceptionHandler(ReactiveResponseHandler responseHandler) {
+    this.responseHandler = responseHandler;
+  }
 
   // ==================== BUSINESS LOGIC EXCEPTIONS ====================
 
