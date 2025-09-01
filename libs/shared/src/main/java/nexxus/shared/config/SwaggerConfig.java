@@ -11,6 +11,9 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.OAuthFlow;
+import io.swagger.v3.oas.models.security.OAuthFlows;
+import io.swagger.v3.oas.models.security.Scopes;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
@@ -50,6 +53,15 @@ public class SwaggerConfig {
 
   @Value("${api.swagger.license.url}")
   private String licenseUrl;
+
+  @Value("${security.auth0.domain}")
+  private String auth0Domain;
+
+  @Value("${security.auth0.client-id}")
+  private String auth0ClientId;
+
+  @Value("${swagger.oauth2-redirect-url}")
+  private String oauth2RedirectUrl;
 
   @Bean
   public OpenAPI customOpenAPI() {
@@ -92,7 +104,9 @@ public class SwaggerConfig {
   }
 
   private Components createComponents() {
-    return new Components().addSecuritySchemes("bearerAuth", createBearerAuth());
+    return new Components()
+        .addSecuritySchemes("bearerAuth", createBearerAuth())
+        .addSecuritySchemes("auth0", createAuth0OAuth2());
   }
 
   private SecurityScheme createBearerAuth() {
@@ -104,7 +118,29 @@ public class SwaggerConfig {
             "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"");
   }
 
+  private SecurityScheme createAuth0OAuth2() {
+    String authUrl = "https://" + auth0Domain + "/authorize";
+    String tokenUrl = "https://" + auth0Domain + "/oauth/token";
+
+    OAuthFlow flow =
+        new OAuthFlow()
+            .authorizationUrl(authUrl)
+            .tokenUrl(tokenUrl)
+            .scopes(
+                new Scopes()
+                    .addString("openid", "OpenID Connect")
+                    .addString("profile", "User profile information")
+                    .addString("email", "User email address"));
+
+    return new SecurityScheme()
+        .type(SecurityScheme.Type.OAUTH2)
+        .flows(new OAuthFlows().authorizationCode(flow))
+        .description("OAuth2 flow for Auth0 authentication");
+  }
+
   private SecurityRequirement createSecurityRequirement() {
-    return new SecurityRequirement().addList("bearerAuth");
+    return new SecurityRequirement()
+        .addList("bearerAuth")
+        .addList("auth0", List.of("openid", "profile", "email"));
   }
 }
