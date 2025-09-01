@@ -57,12 +57,6 @@ public class SwaggerConfig {
   @Value("${security.auth0.domain}")
   private String auth0Domain;
 
-  @Value("${security.auth0.client-id}")
-  private String auth0ClientId;
-
-  @Value("${swagger.oauth2-redirect-url}")
-  private String oauth2RedirectUrl;
-
   @Bean
   public OpenAPI customOpenAPI() {
     if (!swaggerEnabled) {
@@ -106,7 +100,7 @@ public class SwaggerConfig {
   private Components createComponents() {
     return new Components()
         .addSecuritySchemes("bearerAuth", createBearerAuth())
-        .addSecuritySchemes("auth0", createAuth0OAuth2());
+        .addSecuritySchemes("oauth2", createAuth0OAuth2());
   }
 
   private SecurityScheme createBearerAuth() {
@@ -141,6 +135,6 @@ public class SwaggerConfig {
   private SecurityRequirement createSecurityRequirement() {
     return new SecurityRequirement()
         .addList("bearerAuth")
-        .addList("auth0", List.of("openid", "profile", "email"));
+        .addList("oauth2", List.of("openid", "profile", "email"));
   }
 }
