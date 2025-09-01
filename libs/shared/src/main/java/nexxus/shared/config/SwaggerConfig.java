@@ -1,0 +1,110 @@
+package nexxus.shared.config;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
+
+@Configuration
+public class SwaggerConfig {
+
+  @Value("${swagger.enabled}")
+  private boolean swaggerEnabled;
+
+  @Value("${spring.application.name}")
+  private String applicationName;
+
+  @Value("${spring.application.version}")
+  private String applicationVersion;
+
+  @Value("${spring.application.description}")
+  private String applicationDescription;
+
+  @Value("${api.swagger.server-url}")
+  private String serverUrl;
+
+  @Value("${api.swagger.server-description}")
+  private String serverDescription;
+
+  @Value("${api.swagger.contact.name}")
+  private String contactName;
+
+  @Value("${api.swagger.contact.email}")
+  private String contactEmail;
+
+  @Value("${api.swagger.contact.url}")
+  private String contactUrl;
+
+  @Value("${api.swagger.license.name}")
+  private String licenseName;
+
+  @Value("${api.swagger.license.url}")
+  private String licenseUrl;
+
+  @Bean
+  public OpenAPI customOpenAPI() {
+    if (!swaggerEnabled) {
+      // Return a minimal OpenAPI spec when disabled
+      return new OpenAPI()
+          .info(
+              new Info()
+                  .title(applicationName)
+                  .version(applicationVersion)
+                  .description("API documentation is currently disabled"));
+    }
+
+    return new OpenAPI()
+        .info(createInfo())
+        .servers(createServers())
+        .components(createComponents())
+        .addSecurityItem(createSecurityRequirement());
+  }
+
+  private Info createInfo() {
+    return new Info()
+        .title(applicationName)
+        .version(applicationVersion)
+        .description(applicationDescription)
+        .contact(createContact())
+        .license(createLicense());
+  }
+
+  private Contact createContact() {
+    return new Contact().name(contactName).email(contactEmail).url(contactUrl);
+  }
+
+  private License createLicense() {
+    return new License().name(licenseName).url(licenseUrl);
+  }
+
+  private List<Server> createServers() {
+    return List.of(new Server().url(serverUrl).description(serverDescription));
+  }
+
+  private Components createComponents() {
+    return new Components().addSecuritySchemes("bearerAuth", createBearerAuth());
+  }
+
+  private SecurityScheme createBearerAuth() {
+    return new SecurityScheme()
+        .type(SecurityScheme.Type.HTTP)
+        .scheme("bearer")
+        .bearerFormat("JWT")
+        .description(
+            "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"");
+  }
+
+  private SecurityRequirement createSecurityRequirement() {
+    return new SecurityRequirement().addList("bearerAuth");
+  }
+}

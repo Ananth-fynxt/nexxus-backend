@@ -1,0 +1,52 @@
+# Common Application Configuration
+# This file contains shared configuration for all services
+
+spring:
+  # Reactive Database Configuration
+  r2dbc:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    pool:
+      initial-size: ${CONNECTION_POOL_MINIMUM_IDLE}
+      max-size: ${CONNECTION_POOL_MAXIMUM_POOL_SIZE}
+      max-idle-time: ${CONNECTION_POOL_IDLE_TIMEOUT}
+      max-acquire-time: ${CONNECTION_POOL_CONNECTION_TIMEOUT}
+
+# Server Configuration
+server:
+  port: ${SERVER_PORT}
+
+# API Configuration
+api:
+  prefix: ${API_PREFIX}
+  cors:
+    allowed-origins: ${API_CORS_ALLOWED_ORIGINS}
+    allowed-methods: ${API_CORS_ALLOWED_METHODS}
+    allowed-headers: ${API_CORS_ALLOWED_HEADERS}
+    allow-credentials: ${API_CORS_ALLOW_CREDENTIALS}
+    max-age: ${API_CORS_MAX_AGE}
+  swagger:
+    server-url: ${API_SWAGGER_SERVER_URL}
+    server-description: ${API_SWAGGER_SERVER_DESCRIPTION}
+    contact:
+      name: ${API_SWAGGER_CONTACT_NAME}
+      email: ${API_SWAGGER_CONTACT_EMAIL}
+      url: ${API_SWAGGER_CONTACT_URL}
+    license:
+      name: ${API_SWAGGER_LICENSE_NAME}
+      url: ${API_SWAGGER_LICENSE_URL}
+
+# Logging Configuration
+logging:
+  level:
+    root: ${LOGGING_LEVEL_ROOT}
+    nexxus: ${LOGGING_LEVEL_NEXXUS}
+    "[org.springframework]": ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK}
+    "[org.hibernate]": ${LOGGING_LEVEL_ORG_HIBERNATE}
+  pattern:
+    console: ${LOGGING_PATTERN_CONSOLE}
+
+# Swagger Configuration
+swagger:
+  enabled: ${SWAGGER_ENABLED}

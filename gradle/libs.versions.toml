@@ -1,0 +1,116 @@
+[versions]
+# =============================================================================
+# CORE FRAMEWORK VERSIONS
+# =============================================================================
+spring-boot = "3.5.4"
+spring-dependency-management = "1.1.6"
+
+# =============================================================================
+# DATABASE VERSIONS
+# =============================================================================
+flyway = "10.8.1"
+postgresql = "42.7.2"
+r2dbc-postgresql = "1.0.4.RELEASE"
+
+# =============================================================================
+# AUTHENTICATION VERSIONS
+# =============================================================================
+auth0-jwt = "4.4.0"
+
+# =============================================================================
+# DEVELOPMENT TOOLS VERSIONS
+# =============================================================================
+json-schema-validator = "2.2.14"
+lombok = "1.18.30"
+spotless = "6.25.0"
+spring-doc = "2.8.8"
+
+[libraries]
+# =============================================================================
+# SPRING BOOT BOM & STARTERS (Versions managed by BOM)
+# =============================================================================
+spring-boot-bom = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
+spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
+spring-boot-starter-data-r2dbc = { group = "org.springframework.boot", name = "spring-boot-starter-data-r2dbc" }
+spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
+spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
+spring-boot-starter-webflux = { group = "org.springframework.boot", name = "spring-boot-starter-webflux" }
+spring-boot-starter-oauth2-resource-server = { group = "org.springframework.boot", name = "spring-boot-starter-oauth2-resource-server" }
+spring-boot-starter-oauth2-client = { group = "org.springframework.boot", name = "spring-boot-starter-oauth2-client" }
+
+# =============================================================================
+# JSON PROCESSING (Managed by Spring Boot BOM)
+# =============================================================================
+jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind" }
+jackson-datatype-jsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jsr310" }
+
+# =============================================================================
+# REACTIVE PROGRAMMING (Managed by Spring Boot BOM)
+# =============================================================================
+reactor-core = { group = "io.projectreactor", name = "reactor-core" }
+
+# =============================================================================
+# AUTHENTICATION DEPENDENCIES (Versions managed by version.ref)
+# =============================================================================
+auth0-java-jwt = { group = "com.auth0", name = "java-jwt", version.ref = "auth0-jwt" }
+
+# =============================================================================
+# DATABASE DEPENDENCIES (Versions managed by version.ref)
+# =============================================================================
+postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgresql" }
+r2dbc-postgresql = { group = "org.postgresql", name = "r2dbc-postgresql", version.ref = "r2dbc-postgresql" }
+
+# =============================================================================
+# DATABASE MIGRATION (Versions managed by version.ref)
+# =============================================================================
+flyway-core = { group = "org.flywaydb", name = "flyway-core", version.ref = "flyway" }
+flyway-database-postgresql = { group = "org.flywaydb", name = "flyway-database-postgresql", version.ref = "flyway" }
+
+# =============================================================================
+# DEVELOPMENT TOOLS (Versions managed by version.ref)
+# =============================================================================
+json-schema-validator = { group = "com.github.java-json-tools", name = "json-schema-validator", version.ref = "json-schema-validator" }
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
+spring-doc-openapi-starter-webflux-ui = { group = "org.springdoc", name = "springdoc-openapi-starter-webflux-ui", version.ref = "spring-doc" }
+
+# =============================================================================
+# GRADLE PLUGINS (Versions managed by version.ref)
+# =============================================================================
+dependency-management-gradle-plugin = { group = "io.spring.dependency-management", name = "io.spring.dependency-management.gradle.plugin", version.ref = "spring-dependency-management" }
+flyway-gradle-plugin = { group = "org.flywaydb", name = "flyway-gradle-plugin", version.ref = "flyway" }
+spotless-plugin-gradle = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
+spring-boot-gradle-plugin = { group = "org.springframework.boot", name = "org.springframework.boot.gradle.plugin", version.ref = "spring-boot" }
+
+[plugins]
+# =============================================================================
+# GRADLE PLUGINS
+# =============================================================================
+flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+
+[bundles]
+# =============================================================================
+# SPRING BOOT BUNDLES (Versions managed by BOM)
+# =============================================================================
+spring-boot-data = ["spring-boot-starter-data-r2dbc"]
+spring-boot-security = ["spring-boot-starter-security", "spring-boot-starter-oauth2-resource-server", "spring-boot-starter-oauth2-client"]
+spring-boot-web = ["spring-boot-starter-webflux", "spring-boot-starter-actuator", "spring-boot-starter-validation"]
+
+# =============================================================================
+# AUTHENTICATION BUNDLES (Versions managed by version.ref)
+# =============================================================================
+auth0 = ["auth0-java-jwt"]
+
+# =============================================================================
+# DATABASE BUNDLES (Versions managed by version.ref)
+# =============================================================================
+database = ["spring-boot-starter-data-r2dbc", "postgresql", "r2dbc-postgresql"]
+flyway = ["flyway-core", "flyway-database-postgresql"]
+
+# =============================================================================
+# DEVELOPMENT BUNDLES (Versions managed by version.ref)
+# =============================================================================
+development = ["lombok"]
+validation = ["json-schema-validator"]

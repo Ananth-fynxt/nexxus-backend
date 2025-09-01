@@ -1,0 +1,114 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: nexxus-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d nexxus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nexxus-network
+
+  # Nexxus Backend Application
+  nexxus-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexxus-backend
+    environment:
+      # Database Configuration
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_URL: ${DATABASE_URL}
+      SPRING_R2DBC_URL: ${SPRING_R2DBC_URL}
+      SPRING_R2DBC_USERNAME: ${SPRING_R2DBC_USERNAME}
+      SPRING_R2DBC_PASSWORD: ${SPRING_R2DBC_PASSWORD}
+
+      # Application Configuration
+      SPRING_APPLICATION_NAME: ${SPRING_APPLICATION_NAME}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      SERVER_PORT: ${SERVER_PORT}
+
+      # Connection Pool Configuration
+      CONNECTION_POOL_MAXIMUM_POOL_SIZE: ${CONNECTION_POOL_MAXIMUM_POOL_SIZE}
+      CONNECTION_POOL_MINIMUM_IDLE: ${CONNECTION_POOL_MINIMUM_IDLE}
+      CONNECTION_POOL_CONNECTION_TIMEOUT: ${CONNECTION_POOL_CONNECTION_TIMEOUT}
+      CONNECTION_POOL_IDLE_TIMEOUT: ${CONNECTION_POOL_IDLE_TIMEOUT}
+      CONNECTION_POOL_MAX_LIFETIME: ${CONNECTION_POOL_MAX_LIFETIME}
+      CONNECTION_POOL_LEAK_DETECTION_THRESHOLD: ${CONNECTION_POOL_LEAK_DETECTION_THRESHOLD}
+
+      # Flyway Configuration
+      FLYWAY_ENABLED: ${FLYWAY_ENABLED}
+
+      # Logging Configuration
+      LOGGING_LEVEL_ROOT: ${LOGGING_LEVEL_ROOT}
+      LOGGING_LEVEL_NEXXUS: ${LOGGING_LEVEL_NEXXUS}
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK}
+      LOGGING_LEVEL_ORG_HIBERNATE: ${LOGGING_LEVEL_ORG_HIBERNATE}
+      LOGGING_PATTERN_CONSOLE: ${LOGGING_PATTERN_CONSOLE}
+
+      # API Configuration
+      API_PREFIX: ${API_PREFIX}
+      API_CORS_ALLOWED_ORIGINS: ${API_CORS_ALLOWED_ORIGINS}
+      API_CORS_ALLOWED_METHODS: ${API_CORS_ALLOWED_METHODS}
+      API_CORS_ALLOWED_HEADERS: ${API_CORS_ALLOWED_HEADERS}
+      API_CORS_ALLOW_CREDENTIALS: ${API_CORS_ALLOW_CREDENTIALS}
+      API_CORS_MAX_AGE: ${API_CORS_MAX_AGE}
+
+      # Management Configuration
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: ${MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE}
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: ${MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS}
+
+      # Swagger Configuration
+      SWAGGER_ENABLED: ${SWAGGER_ENABLED}
+      SPRING_APPLICATION_VERSION: ${SPRING_APPLICATION_VERSION}
+      SPRING_APPLICATION_DESCRIPTION: ${SPRING_APPLICATION_DESCRIPTION}
+      API_SWAGGER_SERVER_URL: ${API_SWAGGER_SERVER_URL}
+      API_SWAGGER_SERVER_DESCRIPTION: ${API_SWAGGER_SERVER_DESCRIPTION}
+      API_SWAGGER_CONTACT_NAME: ${API_SWAGGER_CONTACT_NAME}
+      API_SWAGGER_CONTACT_EMAIL: ${API_SWAGGER_CONTACT_EMAIL}
+      API_SWAGGER_CONTACT_URL: ${API_SWAGGER_CONTACT_URL}
+      API_SWAGGER_LICENSE_NAME: ${API_SWAGGER_LICENSE_NAME}
+      API_SWAGGER_LICENSE_URL: ${API_SWAGGER_LICENSE_URL}
+
+      # Auth0 Configuration
+      AUTH0_DOMAIN: ${AUTH0_DOMAIN}
+      AUTH0_CLIENT_ID: ${AUTH0_CLIENT_ID}
+      AUTH0_CLIENT_SECRET: ${AUTH0_CLIENT_SECRET}
+      AUTH0_AUDIENCE: ${AUTH0_AUDIENCE}
+      AUTH0_ISSUER_URI: ${AUTH0_ISSUER_URI}
+      AUTH0_JWKS_URI: ${AUTH0_JWKS_URI}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - nexxus-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  nexxus-network:
+    driver: bridge
