@@ -1,4 +1,4 @@
-package nexxus.environment.controller;
+package nexxus.auth.controller;
 
 import java.net.URI;
 
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import nexxus.shared.auth.AuthUrlService;
+import nexxus.shared.controller.BaseController;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -16,7 +17,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController extends BaseController {
 
   private final AuthUrlService authUrlService;
 
