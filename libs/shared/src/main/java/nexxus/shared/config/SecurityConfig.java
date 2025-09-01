@@ -31,6 +31,9 @@ public class SecurityConfig {
   @Value("${frontend.origin:http://localhost:5173}")
   private String frontendOrigin;
 
+  @Value("${api.prefix:/api/v1}")
+  private String apiPrefix;
+
   @Bean
   public SecurityWebFilterChain springSecurityFilterChain(
       ServerHttpSecurity http,
@@ -48,10 +51,10 @@ public class SecurityConfig {
                         "/swagger-ui.html",
                         "/swagger-ui/**",
                         "/webjars/**",
-                        "/api/v1/auth/login",
-                        "/api/v1/auth/logout",
-                        "/api/v1/auth/callback",
-                        "/api/v1/auth/config")
+                        apiPrefix + "/auth/login",
+                        apiPrefix + "/auth/logout",
+                        apiPrefix + "/auth/callback",
+                        apiPrefix + "/auth/config")
                     .permitAll()
                     // All others must be authenticated
                     .anyExchange()
