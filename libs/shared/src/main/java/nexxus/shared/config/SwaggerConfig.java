@@ -3,6 +3,7 @@ package nexxus.shared.config;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,40 +22,40 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 public class SwaggerConfig {
 
-  @Value("${swagger.enabled}")
+  @Value("${swagger.enabled:true}")
   private boolean swaggerEnabled;
 
-  @Value("${spring.application.name}")
+  @Value("${spring.application.name:Nexxus API}")
   private String applicationName;
 
-  @Value("${spring.application.version}")
+  @Value("${spring.application.version:dev}")
   private String applicationVersion;
 
-  @Value("${spring.application.description}")
+  @Value("${spring.application.description:Reactive backend APIs}")
   private String applicationDescription;
 
-  @Value("${api.swagger.server-url}")
+  @Value("${api.swagger.server-url:http://localhost:8080}")
   private String serverUrl;
 
-  @Value("${api.swagger.server-description}")
+  @Value("${api.swagger.server-description:Local server}")
   private String serverDescription;
 
-  @Value("${api.swagger.contact.name}")
+  @Value("${api.swagger.contact.name:Nexxus}")
   private String contactName;
 
-  @Value("${api.swagger.contact.email}")
+  @Value("${api.swagger.contact.email:devnull@example.com}")
   private String contactEmail;
 
-  @Value("${api.swagger.contact.url}")
+  @Value("${api.swagger.contact.url:https://example.com}")
   private String contactUrl;
 
-  @Value("${api.swagger.license.name}")
+  @Value("${api.swagger.license.name:Apache-2.0}")
   private String licenseName;
 
-  @Value("${api.swagger.license.url}")
+  @Value("${api.swagger.license.url:https://www.apache.org/licenses/LICENSE-2.0.html}")
   private String licenseUrl;
 
-  @Value("${security.auth0.domain}")
+  @Value("${security.auth0.domain:}")
   private String auth0Domain;
 
   @Bean
@@ -98,9 +99,11 @@ public class SwaggerConfig {
   }
 
   private Components createComponents() {
-    return new Components()
-        .addSecuritySchemes("bearerAuth", createBearerAuth())
-        .addSecuritySchemes("oauth2", createAuth0OAuth2());
+    Components components = new Components().addSecuritySchemes("bearerAuth", createBearerAuth());
+    if (StringUtils.hasText(auth0Domain)) {
+      components.addSecuritySchemes("oauth2", createAuth0OAuth2());
+    }
+    return components;
   }
 
   private SecurityScheme createBearerAuth() {
@@ -133,8 +136,10 @@ public class SwaggerConfig {
   }
 
   private SecurityRequirement createSecurityRequirement() {
-    return new SecurityRequirement()
-        .addList("bearerAuth")
-        .addList("oauth2", List.of("openid", "profile", "email"));
+    SecurityRequirement requirement = new SecurityRequirement().addList("bearerAuth");
+    if (StringUtils.hasText(auth0Domain)) {
+      requirement.addList("oauth2", List.of("openid", "profile", "email"));
+    }
+    return requirement;
   }
 }
