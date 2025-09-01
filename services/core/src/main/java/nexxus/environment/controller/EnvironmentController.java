@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import nexxus.environment.dto.EnvironmentDto;
 import nexxus.environment.service.EnvironmentService;
+import nexxus.shared.controller.BaseController;
 import nexxus.shared.dto.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/environments")
 @RequiredArgsConstructor
-public class EnvironmentController {
+public class EnvironmentController extends BaseController {
 
   private final EnvironmentService environmentService;
 

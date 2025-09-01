@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import nexxus.flowdefinition.dto.FlowDefinitionDto;
 import nexxus.flowdefinition.service.FlowDefinitionService;
+import nexxus.shared.controller.BaseController;
 import nexxus.shared.dto.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/flow-definitions")
 @RequiredArgsConstructor
-public class FlowDefinitionController {
+public class FlowDefinitionController extends BaseController {
 
   private final FlowDefinitionService flowDefinitionService;
 

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import nexxus.conversionrate.dto.ConversionRateDto;
 import nexxus.conversionrate.service.ConversionRateService;
+import nexxus.shared.controller.BaseController;
 import nexxus.shared.dto.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/conversion-rates")
 @RequiredArgsConstructor
-public class ConversionRateController {
+public class ConversionRateController extends BaseController {
 
   private final ConversionRateService conversionRateService;
 

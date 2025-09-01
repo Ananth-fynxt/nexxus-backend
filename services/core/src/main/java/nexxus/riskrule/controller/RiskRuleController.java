@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import nexxus.riskrule.dto.RiskRuleDto;
 import nexxus.riskrule.service.RiskRuleService;
+import nexxus.shared.controller.BaseController;
 import nexxus.shared.dto.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/risk-rule")
 @RequiredArgsConstructor
-public class RiskRuleController {
+public class RiskRuleController extends BaseController {
 
   private final RiskRuleService riskRuleService;
 

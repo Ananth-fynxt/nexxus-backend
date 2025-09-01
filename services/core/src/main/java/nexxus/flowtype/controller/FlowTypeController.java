@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import nexxus.flowtype.dto.FlowTypeDto;
 import nexxus.flowtype.service.FlowTypeService;
+import nexxus.shared.controller.BaseController;
 import nexxus.shared.dto.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/flow-types")
 @RequiredArgsConstructor
-public class FlowTypeController {
+public class FlowTypeController extends BaseController {
 
   private final FlowTypeService flowTypeService;
 
