@@ -10,6 +10,8 @@ dependencies {
     api(libs.spring.boot.starter.webflux)
     api(libs.spring.boot.starter.data.r2dbc)
     api(libs.spring.boot.starter.security)
+    api(libs.spring.boot.starter.oauth2.resource.server)
+    api(libs.spring.boot.starter.oauth2.client)
     
     // Database
     api(libs.r2dbc.postgresql)
