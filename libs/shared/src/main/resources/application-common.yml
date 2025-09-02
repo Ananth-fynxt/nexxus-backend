@@ -22,14 +22,6 @@ api:
   prefix: ${API_PREFIX}
   swagger:
     server-url: ${API_SWAGGER_SERVER_URL}
-    server-description: ${API_SWAGGER_SERVER_DESCRIPTION}
-    contact:
-      name: ${API_SWAGGER_CONTACT_NAME}
-      email: ${API_SWAGGER_CONTACT_EMAIL}
-      url: ${API_SWAGGER_CONTACT_URL}
-    license:
-      name: ${API_SWAGGER_LICENSE_NAME}
-      url: ${API_SWAGGER_LICENSE_URL}
 
 # Logging Configuration
 logging:
@@ -53,14 +45,9 @@ security:
     callback-url: ${AUTH0_CALLBACK_URL}
     frontend-url: ${AUTH0_FRONTEND_URL}
 
-# Frontend Configuration
-frontend:
-  origin: ${FRONTEND_ORIGIN}
-
 # Swagger Configuration
 swagger:
   enabled: ${SWAGGER_ENABLED}
-  oauth2-redirect-url: ${SWAGGER_OAUTH2_REDIRECT_URL}
 
 # Springdoc Swagger UI OAuth setup
 springdoc:
@@ -70,4 +57,3 @@ springdoc:
       client-secret: ${AUTH0_CLIENT_SECRET}
       use-pkce-with-authorization-code-grant: true
       scopes: "openid,profile,email"
-    oauth2-redirect-url: ${SWAGGER_OAUTH2_REDIRECT_URL}

@@ -2,6 +2,7 @@ package nexxus.shared.config;
 
 import java.util.List;
 
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,9 +10,7 @@ import org.springframework.util.StringUtils;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.OAuthFlow;
 import io.swagger.v3.oas.models.security.OAuthFlows;
 import io.swagger.v3.oas.models.security.Scopes;
@@ -28,32 +27,8 @@ public class SwaggerConfig {
   @Value("${spring.application.name}")
   private String applicationName;
 
-  @Value("${spring.application.version}")
-  private String applicationVersion;
-
-  @Value("${spring.application.description}")
-  private String applicationDescription;
-
   @Value("${api.swagger.server-url}")
   private String serverUrl;
-
-  @Value("${api.swagger.server-description}")
-  private String serverDescription;
-
-  @Value("${api.swagger.contact.name}")
-  private String contactName;
-
-  @Value("${api.swagger.contact.email}")
-  private String contactEmail;
-
-  @Value("${api.swagger.contact.url}")
-  private String contactUrl;
-
-  @Value("${api.swagger.license.name}")
-  private String licenseName;
-
-  @Value("${api.swagger.license.url}")
-  private String licenseUrl;
 
   @Value("${security.auth0.domain}")
   private String auth0Domain;
@@ -61,12 +36,10 @@ public class SwaggerConfig {
   @Bean
   public OpenAPI customOpenAPI() {
     if (!swaggerEnabled) {
-      // Return a minimal OpenAPI spec when disabled
       return new OpenAPI()
           .info(
               new Info()
                   .title(applicationName)
-                  .version(applicationVersion)
                   .description("API documentation is currently disabled"));
     }
 
@@ -77,25 +50,21 @@ public class SwaggerConfig {
         .addSecurityItem(createSecurityRequirement());
   }
 
+  @Bean
+  public GroupedOpenApi publicApi() {
+    return GroupedOpenApi.builder()
+        .group("public")
+        .pathsToMatch("/api/v1/**")
+        .packagesToScan("nexxus")
+        .build();
+  }
+
   private Info createInfo() {
-    return new Info()
-        .title(applicationName)
-        .version(applicationVersion)
-        .description(applicationDescription)
-        .contact(createContact())
-        .license(createLicense());
-  }
-
-  private Contact createContact() {
-    return new Contact().name(contactName).email(contactEmail).url(contactUrl);
-  }
-
-  private License createLicense() {
-    return new License().name(licenseName).url(licenseUrl);
+    return new Info().title(applicationName);
   }
 
   private List<Server> createServers() {
-    return List.of(new Server().url(serverUrl).description(serverDescription));
+    return List.of(new Server().url(serverUrl));
   }
 
   private Components createComponents() {
@@ -123,6 +92,7 @@ public class SwaggerConfig {
         new OAuthFlow()
             .authorizationUrl(authUrl)
             .tokenUrl(tokenUrl)
+            .refreshUrl(tokenUrl)
             .scopes(
                 new Scopes()
                     .addString("openid", "OpenID Connect")
@@ -132,7 +102,8 @@ public class SwaggerConfig {
     return new SecurityScheme()
         .type(SecurityScheme.Type.OAUTH2)
         .flows(new OAuthFlows().authorizationCode(flow))
-        .description("OAuth2 flow for Auth0 authentication");
+        .description(
+            "OAuth2 flow for Auth0 authentication. After login, JWT token will be automatically attached to all API requests.");
   }
 
   private SecurityRequirement createSecurityRequirement() {
