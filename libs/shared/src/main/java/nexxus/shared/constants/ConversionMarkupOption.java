@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum ConversionMarkupOption {
   FIXED_PER_UNIT("FIXED_PER_UNIT"),
-  PERCENTAGE("PERCENTAGE"),
-  COMBINATION("COMBINATION");
+  PERCENTAGE("PERCENTAGE");
 
   private final String value;
 

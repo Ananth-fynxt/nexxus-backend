@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum ConversionRateSource {
   FIXER_API("FIXER_API"),
-  MANUAL("MANUAL");
+  MANUAL("MANUAL"),
+  CUSTOM_URL("CUSTOM_URL");
 
   private final String value;
 

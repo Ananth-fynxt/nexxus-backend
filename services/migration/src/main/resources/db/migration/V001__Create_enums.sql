@@ -33,13 +33,13 @@ CREATE TYPE risk_duration AS ENUM ('HOUR', 'DAY', 'WEEK', 'MONTH');
 CREATE TYPE risk_customer_criteria_type AS ENUM ('TAG', 'ACCOUNT_TYPE');
 
 -- Create conversion_rate_source enum for FX rate sources
-CREATE TYPE conversion_rate_source AS ENUM ('FIXER_API', 'MANUAL');
+CREATE TYPE conversion_rate_source AS ENUM ('FIXER_API', 'MANUAL', 'CUSTOM_URL');
 
 -- Create conversion_fetch_option enum for FX data fetching options
 CREATE TYPE conversion_fetch_option AS ENUM ('REAL_TIME', 'PREVIOUS_DAY_CLOSING');
 
 -- Create conversion_markup_option enum for FX markup options
-CREATE TYPE conversion_markup_option AS ENUM ('FIXED_PER_UNIT', 'PERCENTAGE', 'COMBINATION');
+CREATE TYPE conversion_markup_option AS ENUM ('FIXED_PER_UNIT', 'PERCENTAGE');
 
 -- Create psp_selection_mode enum for PSP selection strategies
 CREATE TYPE psp_selection_mode AS ENUM ('PRIORITY', 'RANDOM', 'WEIGHTED');
