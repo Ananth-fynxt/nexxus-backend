@@ -226,29 +226,18 @@ public class ConversionRateServiceImpl implements ConversionRateService {
   }
 
   private void validateCreateRequest(ConversionRateDto dto) {
+    validateCommonFields(dto);
+    validateSourceTypeFields(dto);
+  }
+
+  private void validateUpdateRequest(ConversionRateDto dto) {
+    validateCommonFields(dto);
+    validateSourceTypeFields(dto);
+  }
+
+  private void validateCommonFields(ConversionRateDto dto) {
     validateNotNull(dto, "Conversion Rate Config DTO");
     validateNotNull(dto.getSourceType(), "Source Type");
-    switch (dto.getSourceType()) {
-      case FIXER_API:
-        validateNotNull(dto.getFetchOption(), "Fetch option");
-        if (dto.getCustomUrl() != null && !dto.getCustomUrl().isBlank()) {
-          throw new IllegalArgumentException("customUrl is not allowed for FIXER_API source");
-        }
-        break;
-      case CUSTOM_URL:
-        validateNotBlank(dto.getCustomUrl(), "Custom URL");
-        break;
-      case MANUAL:
-        if (dto.getFetchOption() != null) {
-          throw new IllegalArgumentException("fetchOption must be null for MANUAL source");
-        }
-        if (dto.getCustomUrl() != null && !dto.getCustomUrl().isBlank()) {
-          throw new IllegalArgumentException("customUrl must be null for MANUAL source");
-        }
-        break;
-      default:
-        throw new IllegalArgumentException("Unsupported sourceType");
-    }
     validateNotBlank(dto.getBrandId(), "Brand ID");
     validateNotBlank(dto.getEnvironmentId(), "Environment ID");
     validateNotNull(dto.getMarkupOption(), "Markup Option");
@@ -257,10 +246,7 @@ public class ConversionRateServiceImpl implements ConversionRateService {
     validateNotNull(dto.getAmount(), "Amount");
   }
 
-  private void validateUpdateRequest(ConversionRateDto dto) {
-    validateNotNull(dto, "Conversion Rate Config DTO");
-    validateNotNull(dto.getSourceType(), "Source Type");
-    // Conditional validation based on sourceType
+  private void validateSourceTypeFields(ConversionRateDto dto) {
     switch (dto.getSourceType()) {
       case FIXER_API:
         validateNotNull(dto.getFetchOption(), "Fetch option");
@@ -282,12 +268,6 @@ public class ConversionRateServiceImpl implements ConversionRateService {
       default:
         throw new IllegalArgumentException("Unsupported sourceType");
     }
-    validateNotBlank(dto.getBrandId(), "Brand ID");
-    validateNotBlank(dto.getEnvironmentId(), "Environment ID");
-    validateNotNull(dto.getMarkupOption(), "Markup Option");
-    validateNotBlank(dto.getSourceCurrency(), "Source Currency");
-    validateNotBlank(dto.getTargetCurrency(), "Target Currency");
-    validateNotNull(dto.getAmount(), "Amount");
   }
 
   private Mono<ResponseEntity<ApiResponse<Object>>> createConversionRate(ConversionRateDto dto) {
