@@ -3,6 +3,7 @@ package nexxus.conversionrate.service.impl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import nexxus.conversionrate.dto.ConversionRateDetailsDto;
 import nexxus.conversionrate.dto.ConversionRateDto;
 import nexxus.conversionrate.entity.ConversionRate;
 import nexxus.conversionrate.repository.ConversionRateMarkupValueRepository;
@@ -54,14 +55,12 @@ public class ConversionRateServiceImpl implements ConversionRateService {
                 return conversionRateMarkupValueRepository
                     .findByConversionRateConfigIdAndConversionRateConfigVersion(
                         config.getId(), config.getVersion())
-                    .next()
+                    .collectList()
+                    .map(markups -> ConversionRateDetailsDto.fromEntity(config, markups))
                     .map(
-                        markupValue ->
-                            ConversionRateDto.fromEntityWithMarkupValue(config, markupValue))
-                    .map(
-                        configDto ->
+                        detailsDto ->
                             responseHandler.successResponse(
-                                configDto, "Conversion rate config found successfully"));
+                                detailsDto, "Conversion rate config found successfully"));
               })
           .switchIfEmpty(
               Mono.just(
@@ -86,16 +85,14 @@ public class ConversionRateServiceImpl implements ConversionRateService {
                 return conversionRateMarkupValueRepository
                     .findByConversionRateConfigIdAndConversionRateConfigVersion(
                         config.getId(), config.getVersion())
-                    .next()
-                    .map(
-                        markupValue ->
-                            ConversionRateDto.fromEntityWithMarkupValue(config, markupValue));
+                    .collectList()
+                    .map(markups -> ConversionRateDetailsDto.fromEntity(config, markups));
               })
           .collectList()
           .map(
-              configDtos ->
+              detailsDtos ->
                   responseHandler.successResponse(
-                      configDtos, "Conversion rate configs found successfully"))
+                      detailsDtos, "Conversion rate configs found successfully"))
           .onErrorResume(e -> databaseError(e, "finding conversion rate configs"));
     } catch (Exception e) {
       return databaseError(e);
@@ -118,6 +115,7 @@ public class ConversionRateServiceImpl implements ConversionRateService {
                           .id(existingConfig.getId())
                           .version(newVersion)
                           .sourceType(dto.getSourceType())
+                          .customUrl(dto.getCustomUrl())
                           .fetchOption(dto.getFetchOption())
                           .brandId(dto.getBrandId())
                           .environmentId(dto.getEnvironmentId())
@@ -136,6 +134,7 @@ public class ConversionRateServiceImpl implements ConversionRateService {
                           newConfig.getId(),
                           newConfig.getVersion(),
                           newConfig.getSourceType(),
+                          newConfig.getCustomUrl(),
                           newConfig.getFetchOption(),
                           newConfig.getBrandId(),
                           newConfig.getEnvironmentId(),
@@ -150,17 +149,21 @@ public class ConversionRateServiceImpl implements ConversionRateService {
                                 return createMarkupValue(
                                         newConfig.getId(), newConfig.getVersion(), dto)
                                     .then(
-                                        Mono.defer(
-                                            () -> {
-                                              ConversionRateDto responseDto =
-                                                  ConversionRateDto.fromEntity(newConfig);
-                                              return Mono.just(
-                                                  responseHandler.successResponse(
-                                                      responseDto,
-                                                      "Conversion Rate Config version "
-                                                          + newVersion
-                                                          + " created successfully"));
-                                            }));
+                                        conversionRateMarkupValueRepository
+                                            .findByConversionRateConfigIdAndConversionRateConfigVersion(
+                                                newConfig.getId(), newConfig.getVersion())
+                                            .collectList()
+                                            .map(
+                                                markups ->
+                                                    ConversionRateDetailsDto.fromEntity(
+                                                        newConfig, markups))
+                                            .map(
+                                                detailsDto ->
+                                                    responseHandler.successResponse(
+                                                        detailsDto,
+                                                        "Conversion Rate Config version "
+                                                            + newVersion
+                                                            + " created successfully")));
                               }));
                 } catch (Exception e) {
                   return databaseError(e, "creating new Conversion Rate Config version");
@@ -225,7 +228,31 @@ public class ConversionRateServiceImpl implements ConversionRateService {
   private void validateCreateRequest(ConversionRateDto dto) {
     validateNotNull(dto, "Conversion Rate Config DTO");
     validateNotNull(dto.getSourceType(), "Source Type");
-    validateNotNull(dto.getFetchOption(), "Fetch option");
+    // Conditional validation based on sourceType
+    switch (dto.getSourceType()) {
+      case FIXER_API:
+        validateNotNull(dto.getFetchOption(), "Fetch option");
+        if (dto.getCustomUrl() != null && !dto.getCustomUrl().isBlank()) {
+          throw new IllegalArgumentException("customUrl is not allowed for FIXER_API source");
+        }
+        break;
+      case CUSTOM_URL:
+        validateNotBlank(dto.getCustomUrl(), "Custom URL");
+        if (dto.getFetchOption() != null) {
+          throw new IllegalArgumentException("fetchOption must be null for CUSTOM_URL source");
+        }
+        break;
+      case MANUAL:
+        if (dto.getFetchOption() != null) {
+          throw new IllegalArgumentException("fetchOption must be null for MANUAL source");
+        }
+        if (dto.getCustomUrl() != null && !dto.getCustomUrl().isBlank()) {
+          throw new IllegalArgumentException("customUrl must be null for MANUAL source");
+        }
+        break;
+      default:
+        throw new IllegalArgumentException("Unsupported sourceType");
+    }
     validateNotBlank(dto.getBrandId(), "Brand ID");
     validateNotBlank(dto.getEnvironmentId(), "Environment ID");
     validateNotNull(dto.getMarkupOption(), "Markup Option");
@@ -237,7 +264,31 @@ public class ConversionRateServiceImpl implements ConversionRateService {
   private void validateUpdateRequest(ConversionRateDto dto) {
     validateNotNull(dto, "Conversion Rate Config DTO");
     validateNotNull(dto.getSourceType(), "Source Type");
-    validateNotNull(dto.getFetchOption(), "Fetch option");
+    // Conditional validation based on sourceType
+    switch (dto.getSourceType()) {
+      case FIXER_API:
+        validateNotNull(dto.getFetchOption(), "Fetch option");
+        if (dto.getCustomUrl() != null && !dto.getCustomUrl().isBlank()) {
+          throw new IllegalArgumentException("customUrl is not allowed for FIXER_API source");
+        }
+        break;
+      case CUSTOM_URL:
+        validateNotBlank(dto.getCustomUrl(), "Custom URL");
+        if (dto.getFetchOption() != null) {
+          throw new IllegalArgumentException("fetchOption must be null for CUSTOM_URL source");
+        }
+        break;
+      case MANUAL:
+        if (dto.getFetchOption() != null) {
+          throw new IllegalArgumentException("fetchOption must be null for MANUAL source");
+        }
+        if (dto.getCustomUrl() != null && !dto.getCustomUrl().isBlank()) {
+          throw new IllegalArgumentException("customUrl must be null for MANUAL source");
+        }
+        break;
+      default:
+        throw new IllegalArgumentException("Unsupported sourceType");
+    }
     validateNotBlank(dto.getBrandId(), "Brand ID");
     validateNotBlank(dto.getEnvironmentId(), "Environment ID");
     validateNotNull(dto.getMarkupOption(), "Markup Option");
@@ -252,6 +303,7 @@ public class ConversionRateServiceImpl implements ConversionRateService {
           ConversionRate.create(
               dto.getSourceType(),
               dto.getFetchOption(),
+              dto.getCustomUrl(),
               dto.getBrandId(),
               dto.getEnvironmentId(),
               "system");
@@ -261,6 +313,7 @@ public class ConversionRateServiceImpl implements ConversionRateService {
               config.getId(),
               config.getVersion(),
               config.getSourceType(),
+              config.getCustomUrl(),
               config.getFetchOption(),
               config.getBrandId(),
               config.getEnvironmentId(),
@@ -274,15 +327,17 @@ public class ConversionRateServiceImpl implements ConversionRateService {
                   () -> {
                     return createMarkupValue(config.getId(), config.getVersion(), dto)
                         .then(
-                            Mono.defer(
-                                () -> {
-                                  ConversionRateDto responseDto =
-                                      ConversionRateDto.fromEntity(config);
-                                  return Mono.just(
-                                      responseHandler.successResponse(
-                                          responseDto,
-                                          "Conversion rate config and markup value created successfully"));
-                                }));
+                            conversionRateMarkupValueRepository
+                                .findByConversionRateConfigIdAndConversionRateConfigVersion(
+                                    config.getId(), config.getVersion())
+                                .collectList()
+                                .map(
+                                    markups -> ConversionRateDetailsDto.fromEntity(config, markups))
+                                .map(
+                                    detailsDto ->
+                                        responseHandler.successResponse(
+                                            detailsDto,
+                                            "Conversion rate config and markup value created successfully")));
                   }))
           .onErrorResume(e -> databaseError(e, "creating conversion rate config"));
 

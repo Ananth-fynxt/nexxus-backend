@@ -30,7 +30,9 @@ public class ConversionRateDto {
   @NotNull(message = "Source Type is required")
   private ConversionRateSource sourceType;
 
-  @NotNull(message = "Fetch option is required")
+  private String customUrl;
+
+  // Conditionally required based on sourceType
   private ConversionFetchOption fetchOption;
 
   @NotBlank(message = "Brand ID is required")
@@ -69,6 +71,7 @@ public class ConversionRateDto {
         .id(entity.getId())
         .version(entity.getVersion())
         .sourceType(entity.getSourceType())
+        .customUrl(entity.getCustomUrl())
         .fetchOption(entity.getFetchOption())
         .brandId(entity.getBrandId())
         .environmentId(entity.getEnvironmentId())

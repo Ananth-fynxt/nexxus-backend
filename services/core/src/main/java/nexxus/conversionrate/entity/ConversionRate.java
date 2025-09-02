@@ -30,6 +30,9 @@ public class ConversionRate {
   @Column("source_type")
   private ConversionRateSource sourceType;
 
+  @Column("custom_url")
+  private String customUrl;
+
   @Column("fetch_option")
   private ConversionFetchOption fetchOption;
 
@@ -57,6 +60,7 @@ public class ConversionRate {
   public static ConversionRate create(
       ConversionRateSource sourceType,
       ConversionFetchOption fetchOption,
+      String customUrl,
       String brandId,
       String environmentId,
       String createdBy) {
@@ -64,6 +68,7 @@ public class ConversionRate {
         .id(IdGenerator.generateConversionRateId())
         .version(1)
         .sourceType(sourceType)
+        .customUrl(customUrl)
         .fetchOption(fetchOption)
         .brandId(brandId)
         .environmentId(environmentId)
@@ -79,6 +84,7 @@ public class ConversionRate {
       ConversionRate existingConversionRate,
       ConversionRateSource sourceType,
       ConversionFetchOption fetchOption,
+      String customUrl,
       String brandId,
       String environmentId,
       Integer newVersion,
@@ -87,6 +93,7 @@ public class ConversionRate {
         .id(existingConversionRate.getId())
         .version(newVersion)
         .sourceType(sourceType)
+        .customUrl(customUrl)
         .fetchOption(fetchOption)
         .brandId(brandId)
         .environmentId(environmentId)
@@ -107,11 +114,13 @@ public class ConversionRate {
   public void updateDetails(
       ConversionRateSource sourceType,
       ConversionFetchOption fetchOption,
+      String customUrl,
       String brandId,
       String environmentId,
       Status status,
       String updatedBy) {
     this.sourceType = sourceType;
+    this.customUrl = customUrl;
     this.fetchOption = fetchOption;
     this.brandId = brandId;
     this.environmentId = environmentId;
