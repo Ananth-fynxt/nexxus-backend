@@ -12,6 +12,11 @@ spring:
       max-size: ${CONNECTION_POOL_MAXIMUM_POOL_SIZE}
       max-idle-time: ${CONNECTION_POOL_IDLE_TIMEOUT}
       max-acquire-time: ${CONNECTION_POOL_CONNECTION_TIMEOUT}
+      
+  # Netty Configuration (basic optimizations)
+  reactor:
+    netty:
+      machine-id-provider: default
 
 # Server Configuration
 server:

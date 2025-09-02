@@ -33,4 +33,11 @@ dependencies {
     
     // Swagger/OpenAPI Documentation
     api(libs.spring.doc.openapi.starter.webflux.ui)
+
+    // Netty DNS Resolver for macOS - fixes DNS resolution issues on macOS
+    // Spring Boot 3.5.4 uses Netty 4.1.114.Final
+    // For Apple Silicon Macs (M1/M2/M3):
+    runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.114.Final:osx-aarch_64")
+    // For Intel Macs, use instead:
+    // runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.114.Final:osx-x86_64")
 }
