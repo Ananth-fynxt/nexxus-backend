@@ -15,4 +15,6 @@ public class Auth0Properties {
   private String audience;
   private String issuerUri;
   private String jwksUri;
+  private String callbackUrl;
+  private String frontendUrl;
 }

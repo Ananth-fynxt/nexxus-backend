@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -21,6 +19,8 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.reactive.config.PathMatchConfigurer;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
 
 /** Reactive Security configuration for the application secured by Auth0 (OIDC/JWT) */
 @Configuration
@@ -28,11 +28,38 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 @EnableConfigurationProperties(Auth0Properties.class)
 public class SecurityConfig {
 
-  @Value("${frontend.origin}")
-  private String frontendOrigin;
+  private final Auth0Properties auth0Properties;
+  private final String apiPrefix;
 
-  @Value("${api.prefix}")
-  private String apiPrefix;
+  public SecurityConfig(Auth0Properties auth0Properties, @Value("${api.prefix}") String apiPrefix) {
+    this.auth0Properties = auth0Properties;
+    this.apiPrefix = apiPrefix;
+  }
+
+  private String[] getPublicPaths() {
+    return combinePaths(getStaticPublicPaths(), getApiPublicPaths());
+  }
+
+  private String[] getStaticPublicPaths() {
+    return new String[] {
+      "/actuator/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/webjars/**"
+    };
+  }
+
+  private String[] getApiPublicPaths() {
+    return new String[] {
+      buildApiPath("/auth/login"),
+      buildApiPath("/auth/logout"),
+      buildApiPath("/auth/callback"),
+      buildApiPath("/auth/config")
+    };
+  }
+
+  private String[] combinePaths(String[]... pathArrays) {
+    return java.util.Arrays.stream(pathArrays)
+        .flatMap(java.util.Arrays::stream)
+        .toArray(String[]::new);
+  }
 
   @Bean
   public SecurityWebFilterChain springSecurityFilterChain(
@@ -43,22 +70,7 @@ public class SecurityConfig {
         .cors(cors -> cors.configurationSource(corsConfigurationSource))
         .authorizeExchange(
             exchanges ->
-                exchanges
-                    // Public endpoints
-                    .pathMatchers(
-                        "/actuator/**",
-                        "/v3/api-docs/**",
-                        "/swagger-ui.html",
-                        "/swagger-ui/**",
-                        "/webjars/**",
-                        apiPrefix + "/auth/login",
-                        apiPrefix + "/auth/logout",
-                        apiPrefix + "/auth/callback",
-                        apiPrefix + "/auth/config")
-                    .permitAll()
-                    // All others must be authenticated
-                    .anyExchange()
-                    .authenticated())
+                exchanges.pathMatchers(getPublicPaths()).permitAll().anyExchange().authenticated())
         .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtDecoder(jwtDecoder)));
 
     return http.build();
@@ -81,22 +93,46 @@ public class SecurityConfig {
   }
 
   @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
-
-  @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOriginPatterns(
-        Arrays.asList(frontendOrigin, "https://ca9a457eb330.ngrok-free.app"));
-    configuration.setAllowedMethods(
-        Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+    configuration.setAllowedOriginPatterns(Arrays.asList(auth0Properties.getFrontendUrl()));
+    configuration.setAllowedMethods(Arrays.asList(getAllowedCorsMethods()));
     configuration.setAllowedHeaders(Arrays.asList("*"));
     configuration.setAllowCredentials(true);
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
     return source;
+  }
+
+  private String[] getAllowedCorsMethods() {
+    return new String[] {"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"};
+  }
+
+  public String getApiPrefix() {
+    return apiPrefix;
+  }
+
+  public String buildApiPath(String path) {
+    if (path == null || path.isEmpty()) {
+      return apiPrefix;
+    }
+
+    String normalizedPath = path.startsWith("/") ? path : "/" + path;
+    return apiPrefix + normalizedPath;
+  }
+
+  @Bean
+  public WebFluxConfigurer webFluxConfigurer() {
+    return new WebFluxConfigurer() {
+      @Override
+      public void configurePathMatching(PathMatchConfigurer configurer) {
+        configurer.addPathPrefix(
+            apiPrefix,
+            c ->
+                c.isAnnotationPresent(
+                    org.springframework.web.bind.annotation.RequestMapping.class));
+      }
+    };
   }
 }
