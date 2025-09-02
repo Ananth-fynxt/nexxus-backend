@@ -49,11 +49,12 @@ public interface ConversionRateRepository extends ReactiveCrudRepository<Convers
 
   @Modifying
   @Query(
-      "INSERT INTO conversion_rate (id, version, source_type, fetch_option, brand_id, environment_id, status, created_at, updated_at, created_by, updated_by) VALUES (:id, :version, :sourceType::conversion_rate_source, :fetchOption::conversion_fetch_option, :brandId, :environmentId, :status::status, :createdAt, :updatedAt, :createdBy, :updatedBy)")
+      "INSERT INTO conversion_rate (id, version, source_type, custom_url, fetch_option, brand_id, environment_id, status, created_at, updated_at, created_by, updated_by) VALUES (:id, :version, :sourceType::conversion_rate_source, :customUrl, :fetchOption::conversion_fetch_option, :brandId, :environmentId, :status::status, :createdAt, :updatedAt, :createdBy, :updatedBy)")
   Mono<Integer> insertConversionRate(
       @Param("id") String id,
       @Param("version") Integer version,
       @Param("sourceType") ConversionRateSource sourceType,
+      @Param("customUrl") String customUrl,
       @Param("fetchOption") ConversionFetchOption fetchOption,
       @Param("brandId") String brandId,
       @Param("environmentId") String environmentId,
@@ -65,10 +66,11 @@ public interface ConversionRateRepository extends ReactiveCrudRepository<Convers
 
   @Modifying
   @Query(
-      "UPDATE conversion_rate SET source_type = :sourceType, fetch_option = :fetchOption, brand_id = :brandId, environment_id = :environmentId, status = :status, updated_at = :updatedAt, updated_by = :updatedBy WHERE id = :id")
+      "UPDATE conversion_rate SET source_type = :sourceType, custom_url = :customUrl, fetch_option = :fetchOption, brand_id = :brandId, environment_id = :environmentId, status = :status, updated_at = :updatedAt, updated_by = :updatedBy WHERE id = :id")
   Mono<Integer> updateConversionRate(
       @Param("id") String id,
       @Param("sourceType") ConversionRateSource sourceType,
+      @Param("customUrl") String customUrl,
       @Param("fetchOption") ConversionFetchOption fetchOption,
       @Param("brandId") String brandId,
       @Param("environmentId") String environmentId,

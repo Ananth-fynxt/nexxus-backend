@@ -33,6 +33,9 @@ public class ConversionRate {
   @Column("fetch_option")
   private ConversionFetchOption fetchOption;
 
+  @Column("custom_url")
+  private String customUrl;
+
   @Column("brand_id")
   private String brandId;
 
@@ -57,6 +60,7 @@ public class ConversionRate {
   public static ConversionRate create(
       ConversionRateSource sourceType,
       ConversionFetchOption fetchOption,
+      String customUrl,
       String brandId,
       String environmentId,
       String createdBy) {
@@ -65,6 +69,7 @@ public class ConversionRate {
         .version(1)
         .sourceType(sourceType)
         .fetchOption(fetchOption)
+        .customUrl(customUrl)
         .brandId(brandId)
         .environmentId(environmentId)
         .status(Status.ENABLED)
@@ -79,6 +84,7 @@ public class ConversionRate {
       ConversionRate existingConversionRate,
       ConversionRateSource sourceType,
       ConversionFetchOption fetchOption,
+      String customUrl,
       String brandId,
       String environmentId,
       Integer newVersion,
@@ -88,6 +94,7 @@ public class ConversionRate {
         .version(newVersion)
         .sourceType(sourceType)
         .fetchOption(fetchOption)
+        .customUrl(customUrl)
         .brandId(brandId)
         .environmentId(environmentId)
         .status(existingConversionRate.getStatus())
@@ -107,12 +114,14 @@ public class ConversionRate {
   public void updateDetails(
       ConversionRateSource sourceType,
       ConversionFetchOption fetchOption,
+      String customUrl,
       String brandId,
       String environmentId,
       Status status,
       String updatedBy) {
     this.sourceType = sourceType;
     this.fetchOption = fetchOption;
+    this.customUrl = customUrl;
     this.brandId = brandId;
     this.environmentId = environmentId;
     this.status = status != null ? status : this.status;
