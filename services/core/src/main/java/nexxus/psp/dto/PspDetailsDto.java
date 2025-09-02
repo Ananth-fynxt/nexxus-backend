@@ -104,6 +104,8 @@ public class PspDetailsDto {
     private String credentialSchema;
     private String flowTypeId;
     private List<String> currencies;
+    private List<String> countries;
+    private List<String> paymentMethods;
     private List<SupportedActionInfo> supportedActions;
   }
 }

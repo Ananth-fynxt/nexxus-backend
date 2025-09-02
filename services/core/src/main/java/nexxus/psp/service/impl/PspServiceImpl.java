@@ -639,6 +639,8 @@ public class PspServiceImpl implements PspService {
                 PspDetailsDto.FlowTargetInfo.builder()
                     .id(flowTarget.getId())
                     .credentialSchema(flowTarget.getCredentialSchema().asString())
+                    .countries(flowTarget.getCountries())
+                    .paymentMethods(flowTarget.getPaymentMethods())
                     .flowTypeId(flowTarget.getFlowTypeId())
                     .currencies(flowTarget.getCurrencies())
                     .supportedActions(supportedActions)

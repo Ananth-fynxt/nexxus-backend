@@ -22,7 +22,7 @@ public interface FlowTargetRepository extends ReactiveCrudRepository<FlowTarget,
 
   @Modifying
   @Query(
-      "INSERT INTO flow_targets (id, name, logo, status, credential_schema, input_schema, currencies, flow_type_id, brand_id, created_at, updated_at, created_by, updated_by) VALUES (:id, :name, :logo, :status::status, :credentialSchema, :inputSchema, :currencies, :flowTypeId, :brandId, :createdAt, :updatedAt, :createdBy, :updatedBy)")
+      "INSERT INTO flow_targets (id, name, logo, status, credential_schema, input_schema, currencies, countries, payment_methods, flow_type_id, brand_id, created_at, updated_at, created_by, updated_by) VALUES (:id, :name, :logo, :status::status, :credentialSchema, :inputSchema, :currencies, :countries, :paymentMethods, :flowTypeId, :brandId, :createdAt, :updatedAt, :createdBy, :updatedBy)")
   Mono<Void> insertFlowTarget(
       @Param("id") String id,
       @Param("name") String name,
@@ -31,6 +31,8 @@ public interface FlowTargetRepository extends ReactiveCrudRepository<FlowTarget,
       @Param("credentialSchema") Json credentialSchema,
       @Param("inputSchema") Json inputSchema,
       @Param("currencies") String[] currencies,
+      @Param("countries") String[] countries,
+      @Param("paymentMethods") String[] paymentMethods,
       @Param("flowTypeId") String flowTypeId,
       @Param("brandId") String brandId,
       @Param("createdAt") LocalDateTime createdAt,
@@ -40,7 +42,7 @@ public interface FlowTargetRepository extends ReactiveCrudRepository<FlowTarget,
 
   @Modifying
   @Query(
-      "UPDATE flow_targets SET name = :name, logo = :logo, status = :status::status, credential_schema = :credentialSchema, input_schema = :inputSchema, currencies = :currencies, brand_id = :brandId, updated_at = :updatedAt WHERE id = :id")
+      "UPDATE flow_targets SET name = :name, logo = :logo, status = :status::status, credential_schema = :credentialSchema, input_schema = :inputSchema, currencies = :currencies, countries = :countries, payment_methods = :paymentMethods, brand_id = :brandId, updated_at = :updatedAt WHERE id = :id")
   Mono<Void> updateFlowTarget(
       @Param("id") String id,
       @Param("name") String name,
@@ -49,6 +51,8 @@ public interface FlowTargetRepository extends ReactiveCrudRepository<FlowTarget,
       @Param("credentialSchema") Json credentialSchema,
       @Param("inputSchema") Json inputSchema,
       @Param("currencies") String[] currencies,
+      @Param("countries") String[] countries,
+      @Param("paymentMethods") String[] paymentMethods,
       @Param("brandId") String brandId,
       @Param("updatedAt") LocalDateTime updatedAt);
 

@@ -211,6 +211,8 @@ public class FlowTargetServiceImpl implements FlowTargetService {
             dto.getCredentialSchema(),
             dto.getInputSchema(),
             dto.getCurrencies(),
+            dto.getCountries(),
+            dto.getPaymentMethods(),
             flowTypeId,
             dto.getBrandId());
 
@@ -224,6 +226,12 @@ public class FlowTargetServiceImpl implements FlowTargetService {
             flowTarget.getInputSchema(),
             flowTarget.getCurrencies() != null
                 ? flowTarget.getCurrencies().toArray(new String[0])
+                : new String[0],
+            flowTarget.getCountries() != null
+                ? flowTarget.getCountries().toArray(new String[0])
+                : new String[0],
+            flowTarget.getPaymentMethods() != null
+                ? flowTarget.getPaymentMethods().toArray(new String[0])
                 : new String[0],
             flowTarget.getFlowTypeId(),
             flowTarget.getBrandId(),
@@ -252,6 +260,8 @@ public class FlowTargetServiceImpl implements FlowTargetService {
                   dto.getCredentialSchema(),
                   dto.getInputSchema(),
                   dto.getCurrencies(),
+                  dto.getCountries(),
+                  dto.getPaymentMethods(),
                   dto.getBrandId());
               return flowTargetRepository.updateFlowTarget(
                   id,
@@ -264,6 +274,16 @@ public class FlowTargetServiceImpl implements FlowTargetService {
                       ? dto.getCurrencies().toArray(new String[0])
                       : flowTarget.getCurrencies() != null
                           ? flowTarget.getCurrencies().toArray(new String[0])
+                          : new String[0],
+                  dto.getCountries() != null
+                      ? dto.getCountries().toArray(new String[0])
+                      : flowTarget.getCountries() != null
+                          ? flowTarget.getCountries().toArray(new String[0])
+                          : new String[0],
+                  dto.getPaymentMethods() != null
+                      ? dto.getPaymentMethods().toArray(new String[0])
+                      : flowTarget.getPaymentMethods() != null
+                          ? flowTarget.getPaymentMethods().toArray(new String[0])
                           : new String[0],
                   flowTarget.getBrandId(),
                   flowTarget.getUpdatedAt());

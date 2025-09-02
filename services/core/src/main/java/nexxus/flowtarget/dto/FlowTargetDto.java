@@ -41,6 +41,10 @@ public class FlowTargetDto {
 
   private List<String> currencies;
 
+  private List<String> countries;
+
+  private List<String> paymentMethods;
+
   private String flowTypeId;
 
   private String brandId;
@@ -86,6 +90,8 @@ public class FlowTargetDto {
         .inputSchema(
             flowTarget.getInputSchema() != null ? flowTarget.getInputSchema().asString() : "{}")
         .currencies(flowTarget.getCurrencies())
+        .countries(flowTarget.getCountries())
+        .paymentMethods(flowTarget.getPaymentMethods())
         .flowTypeId(flowTarget.getFlowTypeId())
         .brandId(flowTarget.getBrandId())
         .createdAt(flowTarget.getCreatedAt())

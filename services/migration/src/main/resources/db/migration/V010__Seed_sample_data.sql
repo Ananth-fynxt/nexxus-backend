@@ -101,8 +101,8 @@ INSERT INTO flow_actions (id, name, steps, flow_type_id, input_schema, output_sc
 -- 5. CREATE FLOW TARGETS BASED ON FLOW TYPE
 -- ===========================================
 
-INSERT INTO flow_targets (id, name, currencies, logo, status, credential_schema, input_schema, flow_type_id, created_at, updated_at, created_by, updated_by) VALUES
-('ftg_stripe_payment_001', 'Stripe Payment Gateway', '{USD,EUR}', 'https://sample-logos.s3.amazonaws.com/stripe-logo.png', 'ENABLED',
+INSERT INTO flow_targets (id, name, currencies, countries, payment_methods, logo, status, credential_schema, input_schema, flow_type_id, created_at, updated_at, created_by, updated_by) VALUES
+('ftg_stripe_payment_001', 'Stripe Payment Gateway', '{USD,EUR}', '{US,CA,GB}', '{credit_card,debit_card,digital_wallet}', 'https://sample-logos.s3.amazonaws.com/stripe-logo.png', 'ENABLED',
  '{
    "type": "object",
    "properties": {
@@ -121,7 +121,7 @@ INSERT INTO flow_targets (id, name, currencies, logo, status, credential_schema,
  }',
  'ftp_payment_001', NOW(), NOW(), 'system', 'system'),
 
-('ftg_paypal_payment_001', 'PayPal Payment Gateway', '{AED,INR}','https://sample-logos.s3.amazonaws.com/paypal-logo.png', 'ENABLED',
+('ftg_paypal_payment_001', 'PayPal Payment Gateway', '{AED,INR}', '{AE,IN,SG}', '{paypal,paypal_credit}', 'https://sample-logos.s3.amazonaws.com/paypal-logo.png', 'ENABLED',
  '{
    "type": "object",
    "properties": {
@@ -141,7 +141,7 @@ INSERT INTO flow_targets (id, name, currencies, logo, status, credential_schema,
  }',
  'ftp_payment_001', NOW(), NOW(), 'system', 'system'),
 
-('ftg_bank_transfer_001', 'Bank Transfer Service', '{CHN,CAD}', 'https://sample-logos.s3.amazonaws.com/bank-logo.png', 'ENABLED',
+('ftg_bank_transfer_001', 'Bank Transfer Service', '{CN,CA}', '{CN,CA,US}', '{bank_transfer,wire_transfer}', 'https://sample-logos.s3.amazonaws.com/bank-logo.png', 'ENABLED',
  '{
    "type": "object",
    "properties": {
@@ -187,9 +187,15 @@ INSERT INTO flow_definitions (id, flow_action_id, flow_target_id, description, c
 -- 3. Flow Types: 1 (Payment Processing)
 -- 4. Flow Actions: 3 (Deposit, Withdraw, Refund)
 -- 5. Flow Targets: 3 (Stripe, PayPal, Bank Transfer)
+--    - Each with currencies, countries, and payment_methods arrays
+--    - Complete credential and input schemas
 -- 6. Flow Definitions: 9 (All combinations of actions and targets)
 --
 -- Total Records: 17 sample records
+-- Sample Data Features:
+-- - Geographic coverage: US, CA, GB, AE, IN, SG, CN
+-- - Payment methods: credit_card, debit_card, digital_wallet, paypal, paypal_credit, bank_transfer, wire_transfer
+-- - Multi-currency support: USD, EUR, AED, INR, CNY, CAD
 -- All IDs follow the standard prefix format
 -- All relationships properly established
 -- ===========================================

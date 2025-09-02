@@ -41,6 +41,12 @@ public class FlowTarget {
   @Column("currencies")
   private List<String> currencies;
 
+  @Column("countries")
+  private List<String> countries;
+
+  @Column("payment_methods")
+  private List<String> paymentMethods;
+
   @Column("flow_type_id")
   private String flowTypeId;
 
@@ -66,6 +72,8 @@ public class FlowTarget {
       String credentialSchema,
       String inputSchema,
       List<String> currencies,
+      List<String> countries,
+      List<String> paymentMethods,
       String flowTypeId,
       String brandId) {
     return FlowTarget.builder()
@@ -76,6 +84,8 @@ public class FlowTarget {
         .credentialSchema(Json.of(credentialSchema != null ? credentialSchema : "{}"))
         .inputSchema(Json.of(inputSchema != null ? inputSchema : "{}"))
         .currencies(currencies != null ? currencies : List.of())
+        .countries(countries != null ? countries : List.of())
+        .paymentMethods(paymentMethods != null ? paymentMethods : List.of())
         .flowTypeId(flowTypeId)
         .brandId(brandId)
         .createdAt(LocalDateTime.now())
@@ -92,6 +102,8 @@ public class FlowTarget {
       String credentialSchema,
       String inputSchema,
       List<String> currencies,
+      List<String> countries,
+      List<String> paymentMethods,
       String brandId) {
     this.name = name;
     this.logo = logo;
@@ -100,6 +112,8 @@ public class FlowTarget {
         credentialSchema != null ? Json.of(credentialSchema) : this.credentialSchema;
     this.inputSchema = inputSchema != null ? Json.of(inputSchema) : this.inputSchema;
     this.currencies = currencies != null ? currencies : this.currencies;
+    this.countries = countries != null ? countries : this.countries;
+    this.paymentMethods = paymentMethods != null ? paymentMethods : this.paymentMethods;
     this.brandId = brandId != null ? brandId : this.brandId;
     this.updatedAt = LocalDateTime.now();
   }

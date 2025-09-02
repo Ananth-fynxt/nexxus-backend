@@ -57,6 +57,8 @@ CREATE TABLE flow_targets (
     credential_schema JSONB NOT NULL,
     input_schema JSONB NOT NULL DEFAULT '{}',
     currencies TEXT[] NOT NULL DEFAULT '{}',
+    countries TEXT[] NOT NULL DEFAULT '{}',
+    payment_methods TEXT[] NOT NULL DEFAULT '{}',
     flow_type_id TEXT NOT NULL REFERENCES flow_types(id),
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
