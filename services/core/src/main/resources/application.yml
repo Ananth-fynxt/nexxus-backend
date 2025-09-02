@@ -4,19 +4,21 @@
 
 spring:
   application:
-    name: ${SPRING_APPLICATION_NAME}
+    name: ${SPRING_APPLICATION_NAME:nexxus-core}
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE}
+    active: ${SPRING_PROFILES_ACTIVE:dev}
   config:
     import:
       - optional:classpath:/application-common.yml
 
-# Management Configuration (Core service specific)
+server:
+  port: 8080
+
 management:
   endpoints:
     web:
       exposure:
-        include: ${MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE}
+        include: ${MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE:health,info}
   endpoint:
     health:
-      show-details: ${MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS}
+      show-details: ${MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS:ALWAYS}

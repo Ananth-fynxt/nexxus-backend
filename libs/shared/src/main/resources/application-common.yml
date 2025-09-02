@@ -31,12 +31,12 @@ api:
 # Logging Configuration
 logging:
   level:
-    root: ${LOGGING_LEVEL_ROOT}
-    nexxus: ${LOGGING_LEVEL_NEXXUS}
-    "[org.springframework]": ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK}
-    "[org.hibernate]": ${LOGGING_LEVEL_ORG_HIBERNATE}
+    root: ${LOGGING_LEVEL_ROOT:INFO}
+    nexxus: ${LOGGING_LEVEL_NEXXUS:DEBUG}
+    "[org.springframework]": ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK:INFO}
+    "[org.hibernate]": ${LOGGING_LEVEL_ORG_HIBERNATE:INFO}
   pattern:
-    console: ${LOGGING_PATTERN_CONSOLE}
+    console: ${LOGGING_PATTERN_CONSOLE:%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n}
 
 # Security/Auth0 Configuration
 security:

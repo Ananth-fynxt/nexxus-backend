@@ -16,3 +16,5 @@ rootProject.name = "nexxus-backend"
 include("libs:shared")
 include("services:migration")
 include("services:core")
+include("libs:integration:cron")
+include("services:scheduler")
