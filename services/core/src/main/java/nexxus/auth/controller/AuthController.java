@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import nexxus.auth.dto.TokenResponse;
+import nexxus.auth.service.AuthService;
 import nexxus.shared.auth.AuthUrlService;
 import nexxus.shared.controller.BaseController;
 
@@ -20,6 +22,7 @@ import reactor.core.publisher.Mono;
 public class AuthController extends BaseController {
 
   private final AuthUrlService authUrlService;
+  private final AuthService authService;
 
   @GetMapping("/login")
   public Mono<ResponseEntity<Void>> login(
@@ -55,7 +58,7 @@ public class AuthController extends BaseController {
   }
 
   @GetMapping("/callback")
-  public Mono<ResponseEntity<String>> callback(
+  public Mono<ResponseEntity<?>> callback(
       @RequestParam(value = "code", required = false) String code,
       @RequestParam(value = "state", required = false) String state,
       @RequestParam(value = "error", required = false) String error,
@@ -67,10 +70,10 @@ public class AuthController extends BaseController {
     }
 
     if (code != null) {
-      // In a real implementation, you would exchange this code for tokens
-      return Mono.just(
-          ResponseEntity.ok()
-              .body("Authentication successful! Code received: " + code.substring(0, 10) + "..."));
+      String redirectUri = "https://ca9a457eb330.ngrok-free.app/api/v1/auth/callback";
+      return authService
+          .exchangeCodeForToken(code, redirectUri, state)
+          .map(response -> (ResponseEntity<?>) response);
     }
 
     return Mono.just(

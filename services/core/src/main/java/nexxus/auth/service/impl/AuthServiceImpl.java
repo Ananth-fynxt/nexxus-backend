@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import nexxus.auth.dto.TokenResponse;
 import nexxus.auth.service.AuthService;
@@ -38,20 +39,25 @@ public class AuthServiceImpl implements AuthService {
       String code, String redirectUri, String state) {
     WebClient webClient = createWebClient();
 
-    Map<String, Object> payload = new HashMap<>();
-    payload.put("grant_type", "authorization_code");
-    payload.put("client_id", auth0Properties.getClientId());
-    payload.put("client_secret", auth0Properties.getClientSecret());
-    payload.put("code", code);
-    payload.put("redirect_uri", redirectUri);
-
+    // Auth0 expects application/x-www-form-urlencoded for token exchange
     return webClient
         .post()
         .uri("/oauth/token")
-        .contentType(MediaType.APPLICATION_JSON)
-        .body(BodyInserters.fromValue(payload))
+        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+        .body(
+            BodyInserters.fromFormData("grant_type", "authorization_code")
+                .with("client_id", auth0Properties.getClientId())
+                .with("client_secret", auth0Properties.getClientSecret())
+                .with("code", code)
+                .with("redirect_uri", redirectUri))
         .retrieve()
         .bodyToMono(TokenResponse.class)
-        .map(ResponseEntity::ok);
+        .map(ResponseEntity::ok)
+        .onErrorResume(
+            WebClientResponseException.class,
+            ex ->
+                Mono.error(
+                    new IllegalStateException(
+                        "Auth0 token exchange failed: " + ex.getResponseBodyAsString(), ex)));
   }
 }
