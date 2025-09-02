@@ -2,6 +2,7 @@ package nexxus.webhook.service.impl;
 
 import java.time.LocalDateTime;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -105,7 +106,7 @@ public class WebhookServiceImpl implements WebhookService {
               customError(
                   ErrorCode.WEBHOOK_NOT_FOUND,
                   "Webhook not found with ID: " + id,
-                  org.springframework.http.HttpStatus.NOT_FOUND))
+                  HttpStatus.NOT_FOUND))
           .onErrorResume(ValidationException.class, e -> validationError(e.getMessage()));
 
     } catch (ValidationException e) {
@@ -129,7 +130,7 @@ public class WebhookServiceImpl implements WebhookService {
               customError(
                   ErrorCode.WEBHOOK_NOT_FOUND,
                   "Webhook not found with ID: " + id,
-                  org.springframework.http.HttpStatus.NOT_FOUND))
+                  HttpStatus.NOT_FOUND))
           .onErrorResume(ValidationException.class, e -> validationError(e.getMessage()));
 
     } catch (ValidationException e) {
@@ -176,7 +177,7 @@ public class WebhookServiceImpl implements WebhookService {
               customError(
                   ErrorCode.WEBHOOK_NOT_FOUND,
                   "Webhook not found with ID: " + id,
-                  org.springframework.http.HttpStatus.NOT_FOUND))
+                  HttpStatus.NOT_FOUND))
           .onErrorResume(ValidationException.class, e -> validationError(e.getMessage()));
 
     } catch (ValidationException e) {

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -92,7 +93,7 @@ public class PspServiceImpl implements PspService {
                                     "PSP already exists with name: "
                                         + pspDto.getName()
                                         + " for the given brand, environment and flow target",
-                                    org.springframework.http.HttpStatus.CONFLICT);
+                                    HttpStatus.CONFLICT);
                               } else {
                                 return createPsp(pspDto);
                               }
@@ -104,7 +105,7 @@ public class PspServiceImpl implements PspService {
                   customError(
                       ErrorCode.PSP_CONFIGURATION_ERROR,
                       "Invalid credentials: " + e.getMessage(),
-                      org.springframework.http.HttpStatus.BAD_REQUEST));
+                      HttpStatus.BAD_REQUEST));
 
     } catch (Exception e) {
       return databaseError(e, "creating PSP");
@@ -278,7 +279,7 @@ public class PspServiceImpl implements PspService {
               customError(
                   ErrorCode.PSP_NOT_FOUND,
                   "PSP not found with ID: " + pspId,
-                  org.springframework.http.HttpStatus.NOT_FOUND));
+                  HttpStatus.NOT_FOUND));
 
     } catch (Exception e) {
       return databaseError(e, "retrieving PSP details");
@@ -396,7 +397,7 @@ public class PspServiceImpl implements PspService {
                                 return customError(
                                     ErrorCode.PSP_NOT_FOUND,
                                     "PSP not found with ID: " + pspId,
-                                    org.springframework.http.HttpStatus.NOT_FOUND);
+                                    HttpStatus.NOT_FOUND);
                               } else {
                                 return updatePsp(pspId, existingPsp, pspDto);
                               }
@@ -405,7 +406,7 @@ public class PspServiceImpl implements PspService {
                             customError(
                                 ErrorCode.PSP_NOT_FOUND,
                                 "PSP not found with ID: " + pspId,
-                                org.springframework.http.HttpStatus.NOT_FOUND)));
+                                HttpStatus.NOT_FOUND)));
               })
           .onErrorResume(
               SchemaValidationException.class,
@@ -413,7 +414,7 @@ public class PspServiceImpl implements PspService {
                   customError(
                       ErrorCode.PSP_CONFIGURATION_ERROR,
                       "Invalid credentials: " + e.getMessage(),
-                      org.springframework.http.HttpStatus.BAD_REQUEST));
+                      HttpStatus.BAD_REQUEST));
 
     } catch (Exception e) {
       return databaseError(e, "updating PSP");

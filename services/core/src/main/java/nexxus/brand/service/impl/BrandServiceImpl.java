@@ -2,6 +2,7 @@ package nexxus.brand.service.impl;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,7 @@ public class BrandServiceImpl implements BrandService {
                   customError(
                       ErrorCode.BRAND_ALREADY_EXISTS,
                       "Brand already exists with name: " + brandDto.getName(),
-                      org.springframework.http.HttpStatus.CONFLICT))
+                      HttpStatus.CONFLICT))
           .switchIfEmpty(createBrand(brandDto));
 
     } catch (Exception e) {
@@ -70,9 +71,7 @@ public class BrandServiceImpl implements BrandService {
         .flatMap(brand -> Mono.just(BrandDto.fromEntity(brand)).flatMap(this::successResponse))
         .switchIfEmpty(
             customError(
-                ErrorCode.BRAND_NOT_FOUND,
-                "Brand not found with ID: " + id,
-                org.springframework.http.HttpStatus.NOT_FOUND))
+                ErrorCode.BRAND_NOT_FOUND, "Brand not found with ID: " + id, HttpStatus.NOT_FOUND))
         .onErrorResume(e -> databaseError(e, "retrieving brand"));
   }
 
@@ -93,7 +92,7 @@ public class BrandServiceImpl implements BrandService {
                   return customError(
                       ErrorCode.BRAND_NOT_FOUND,
                       "Brand not found with ID: " + id,
-                      org.springframework.http.HttpStatus.NOT_FOUND);
+                      HttpStatus.NOT_FOUND);
                 }
               });
 
@@ -119,7 +118,7 @@ public class BrandServiceImpl implements BrandService {
                 return customError(
                     ErrorCode.BRAND_NOT_FOUND,
                     "Brand not found with ID: " + id,
-                    org.springframework.http.HttpStatus.NOT_FOUND);
+                    HttpStatus.NOT_FOUND);
               }
             })
         .onErrorResume(e -> databaseError(e, "deleting brand"));

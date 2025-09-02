@@ -3,6 +3,7 @@ package nexxus.riskrule.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +50,7 @@ public class RiskRuleServiceImpl implements RiskRuleService {
         return customError(
             ErrorCode.RISK_RULE_INVALID,
             "PSPs list must contain at least one item",
-            org.springframework.http.HttpStatus.BAD_REQUEST);
+            HttpStatus.BAD_REQUEST);
       }
 
       Mono<ResponseEntity<ApiResponse<Object>>> validationOutcome = validateCustomerCriteria(dto);
@@ -178,7 +179,7 @@ public class RiskRuleServiceImpl implements RiskRuleService {
                   responseHandler.errorResponse(
                       ErrorCode.RISK_RULE_NOT_FOUND,
                       "Risk Rule not found with ID: " + id,
-                      org.springframework.http.HttpStatus.NOT_FOUND)))
+                      HttpStatus.NOT_FOUND)))
           .onErrorResume(e -> databaseError(e, "finding Risk Rule"));
     } catch (Exception e) {
       return databaseError(e);
@@ -251,7 +252,7 @@ public class RiskRuleServiceImpl implements RiskRuleService {
                   responseHandler.errorResponse(
                       ErrorCode.RISK_RULE_NOT_FOUND,
                       "Risk Rule not found with ID: " + id,
-                      org.springframework.http.HttpStatus.NOT_FOUND)))
+                      HttpStatus.NOT_FOUND)))
           .onErrorResume(e -> databaseError(e, "deleting Risk Rule"));
     } catch (Exception e) {
       return databaseError(e);
@@ -265,7 +266,7 @@ public class RiskRuleServiceImpl implements RiskRuleService {
         return customError(
             ErrorCode.RISK_RULE_INVALID,
             "PSPs list must contain at least one item",
-            org.springframework.http.HttpStatus.BAD_REQUEST);
+            HttpStatus.BAD_REQUEST);
       }
 
       Mono<ResponseEntity<ApiResponse<Object>>> validationOutcome = validateCustomerCriteria(dto);
@@ -398,7 +399,7 @@ public class RiskRuleServiceImpl implements RiskRuleService {
                             responseHandler.errorResponse(
                                 ErrorCode.RISK_RULE_NOT_FOUND,
                                 "Risk Rule not found with ID: " + id,
-                                org.springframework.http.HttpStatus.NOT_FOUND)))
+                                HttpStatus.NOT_FOUND)))
                     .onErrorResume(e -> databaseError(e));
               });
 
@@ -444,13 +445,13 @@ public class RiskRuleServiceImpl implements RiskRuleService {
         return customError(
             ErrorCode.RISK_RULE_INVALID,
             "criteriaType is required when type is CUSTOMER",
-            org.springframework.http.HttpStatus.BAD_REQUEST);
+            HttpStatus.BAD_REQUEST);
       }
       if (dto.getCriteriaValue() == null || dto.getCriteriaValue().trim().isEmpty()) {
         return customError(
             ErrorCode.RISK_RULE_INVALID,
             "criteriaValue is required when type is CUSTOMER",
-            org.springframework.http.HttpStatus.BAD_REQUEST);
+            HttpStatus.BAD_REQUEST);
       }
     } else if (RiskType.DEFAULT.equals(dto.getType())) {
       boolean hasCriteriaFields =
@@ -461,7 +462,7 @@ public class RiskRuleServiceImpl implements RiskRuleService {
         return customError(
             ErrorCode.RISK_RULE_INVALID,
             "criteriaType and criteriaValue must not be provided when type is DEFAULT",
-            org.springframework.http.HttpStatus.BAD_REQUEST);
+            HttpStatus.BAD_REQUEST);
       }
     }
     return null;

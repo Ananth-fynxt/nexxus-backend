@@ -3,6 +3,7 @@ package nexxus.transaction.service.impl;
 import java.time.LocalDateTime;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -73,7 +74,7 @@ public class TransactionServiceImpl implements TransactionService {
                   return customError(
                       ErrorCode.TRANSACTION_NOT_FOUND,
                       "Transaction not found with ID: " + id,
-                      org.springframework.http.HttpStatus.NOT_FOUND);
+                      HttpStatus.NOT_FOUND);
                 }
 
                 try {
@@ -104,7 +105,7 @@ public class TransactionServiceImpl implements TransactionService {
               customError(
                   ErrorCode.TRANSACTION_NOT_FOUND,
                   "Transaction not found with ID: " + id,
-                  org.springframework.http.HttpStatus.NOT_FOUND));
+                  HttpStatus.NOT_FOUND));
 
     } catch (Exception e) {
       return databaseError(e, "retrieving transaction");

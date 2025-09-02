@@ -1,5 +1,6 @@
 package nexxus.conversionrate.service.impl;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +68,7 @@ public class ConversionRateServiceImpl implements ConversionRateService {
                   responseHandler.errorResponse(
                       ErrorCode.CONVERSION_RATE_NOT_FOUND,
                       "Conversion Rate Config not found with ID: " + id,
-                      org.springframework.http.HttpStatus.NOT_FOUND)))
+                      HttpStatus.NOT_FOUND)))
           .onErrorResume(e -> databaseError(e, "finding Conversion Rate Config"));
     } catch (Exception e) {
       return databaseError(e);
@@ -174,7 +175,7 @@ public class ConversionRateServiceImpl implements ConversionRateService {
                   responseHandler.errorResponse(
                       ErrorCode.CONVERSION_RATE_NOT_FOUND,
                       "Conversion Rate Config not found with ID: " + id,
-                      org.springframework.http.HttpStatus.NOT_FOUND)))
+                      HttpStatus.NOT_FOUND)))
           .onErrorResume(e -> databaseError(e));
     } catch (IllegalArgumentException e) {
       return validationError(e.getMessage());
@@ -196,7 +197,7 @@ public class ConversionRateServiceImpl implements ConversionRateService {
                       responseHandler.errorResponse(
                           ErrorCode.CONVERSION_RATE_NOT_FOUND,
                           "Conversion Rate Config not found with ID: " + id,
-                          org.springframework.http.HttpStatus.NOT_FOUND));
+                          HttpStatus.NOT_FOUND));
                 }
 
                 return Flux.fromIterable(conversionRateConfigs)

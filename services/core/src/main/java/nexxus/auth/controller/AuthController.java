@@ -2,6 +2,7 @@ package nexxus.auth.controller;
 
 import java.net.URI;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import nexxus.auth.service.AuthService;
 import nexxus.shared.auth.AuthUrlService;
 import nexxus.shared.config.Auth0Properties;
+import nexxus.shared.constants.ErrorCode;
 import nexxus.shared.controller.BaseController;
 import nexxus.shared.dto.ApiResponse;
 
@@ -63,9 +65,9 @@ public class AuthController extends BaseController {
 
     if (error != null) {
       return authService.customError(
-          nexxus.shared.constants.ErrorCode.AUTHENTICATION_FAILED,
+          ErrorCode.AUTHENTICATION_FAILED,
           "Authentication failed: " + (errorDescription != null ? errorDescription : error),
-          org.springframework.http.HttpStatus.UNAUTHORIZED);
+          HttpStatus.UNAUTHORIZED);
     }
 
     if (code != null) {
@@ -88,9 +90,9 @@ public class AuthController extends BaseController {
           configInfo, "Auth0 configuration status retrieved successfully");
     } catch (Exception e) {
       return authService.customError(
-          nexxus.shared.constants.ErrorCode.GENERIC_ERROR,
+          ErrorCode.GENERIC_ERROR,
           "Auth0 configuration error: " + e.getMessage(),
-          org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR);
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

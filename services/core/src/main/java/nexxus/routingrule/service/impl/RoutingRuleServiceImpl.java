@@ -154,7 +154,7 @@ public class RoutingRuleServiceImpl implements RoutingRuleService {
             customError(
                 ErrorCode.ROUTING_RULE_NOT_FOUND,
                 "Routing rule not found with ID: " + id,
-                org.springframework.http.HttpStatus.NOT_FOUND))
+                HttpStatus.NOT_FOUND))
         .onErrorResume(e -> databaseError(e, "deleting routing rule"));
   }
 
@@ -168,7 +168,7 @@ public class RoutingRuleServiceImpl implements RoutingRuleService {
             customError(
                 ErrorCode.ROUTING_RULE_NOT_FOUND,
                 "Routing rule not found with ID: " + id,
-                org.springframework.http.HttpStatus.NOT_FOUND))
+                HttpStatus.NOT_FOUND))
         .onErrorResume(e -> databaseError(e, "retrieving routing rule"));
   }
 
@@ -268,7 +268,7 @@ public class RoutingRuleServiceImpl implements RoutingRuleService {
             customError(
                 ErrorCode.ROUTING_RULE_NOT_FOUND,
                 "Routing rule not found with ID: " + id,
-                org.springframework.http.HttpStatus.NOT_FOUND))
+                HttpStatus.NOT_FOUND))
         .onErrorResume(e -> databaseError(e, "updating routing rule"));
   }
 

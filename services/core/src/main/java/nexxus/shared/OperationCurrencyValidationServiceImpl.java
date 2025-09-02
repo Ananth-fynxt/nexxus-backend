@@ -2,6 +2,7 @@ package nexxus.shared;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +44,7 @@ public class OperationCurrencyValidationServiceImpl implements OperationCurrency
                     responseHandler.errorResponse(
                         ErrorCode.PSP_CONFIGURATION_ERROR,
                         "Flow target not found: " + request.getFlowTargetId(),
-                        org.springframework.http.HttpStatus.BAD_REQUEST);
+                        HttpStatus.BAD_REQUEST);
                 return ValidationResult.failure(errorResponse);
               }
 
@@ -53,7 +54,7 @@ public class OperationCurrencyValidationServiceImpl implements OperationCurrency
                     responseHandler.errorResponse(
                         ErrorCode.PSP_CURRENCY_NOT_SUPPORTED,
                         "Flow target does not support any currencies",
-                        org.springframework.http.HttpStatus.BAD_REQUEST);
+                        HttpStatus.BAD_REQUEST);
                 return ValidationResult.failure(errorResponse);
               }
 
@@ -83,9 +84,7 @@ public class OperationCurrencyValidationServiceImpl implements OperationCurrency
                     "Currency validation failed:\n" + String.join("\n", validationErrors);
                 ResponseEntity<ApiResponse<Object>> errorResponse =
                     responseHandler.errorResponse(
-                        ErrorCode.PSP_CURRENCY_NOT_SUPPORTED,
-                        errorMessage,
-                        org.springframework.http.HttpStatus.BAD_REQUEST);
+                        ErrorCode.PSP_CURRENCY_NOT_SUPPORTED, errorMessage, HttpStatus.BAD_REQUEST);
                 return ValidationResult.failure(errorResponse);
               }
 

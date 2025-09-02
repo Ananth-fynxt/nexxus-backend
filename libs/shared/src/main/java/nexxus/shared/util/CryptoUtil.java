@@ -221,6 +221,7 @@ public class CryptoUtil {
    * @return Map of credential key-value pairs
    * @throws Exception if JSON parsing fails
    */
+  @SuppressWarnings("unchecked")
   public Map<String, String> parseCredentialJson(String credentialJson) throws Exception {
     if (credentialJson == null || credentialJson.trim().isEmpty()) {
       return new HashMap<>();

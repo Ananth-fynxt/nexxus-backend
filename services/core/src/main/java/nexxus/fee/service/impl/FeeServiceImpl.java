@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -63,7 +64,7 @@ public class FeeServiceImpl implements FeeService {
                       "Fee already exists with name: "
                           + feeDto.getName()
                           + " for the given brand, environment and flow action",
-                      org.springframework.http.HttpStatus.CONFLICT))
+                      HttpStatus.CONFLICT))
           .switchIfEmpty(upsertFee(null, feeDto, "create"));
 
     } catch (Exception e) {
@@ -177,9 +178,7 @@ public class FeeServiceImpl implements FeeService {
         .flatMap(feeDto -> successResponse(feeDto, "Fee retrieved successfully"))
         .switchIfEmpty(
             customError(
-                ErrorCode.FEE_NOT_FOUND,
-                "Fee not found with ID: " + id,
-                org.springframework.http.HttpStatus.NOT_FOUND))
+                ErrorCode.FEE_NOT_FOUND, "Fee not found with ID: " + id, HttpStatus.NOT_FOUND))
         .onErrorResume(e -> databaseError(e, "retrieving fee"));
   }
 
@@ -217,9 +216,7 @@ public class FeeServiceImpl implements FeeService {
           .flatMap(existingFee -> upsertFee(existingFee, feeDto, "update"))
           .switchIfEmpty(
               customError(
-                  ErrorCode.FEE_NOT_FOUND,
-                  "Fee not found with ID: " + id,
-                  org.springframework.http.HttpStatus.NOT_FOUND));
+                  ErrorCode.FEE_NOT_FOUND, "Fee not found with ID: " + id, HttpStatus.NOT_FOUND));
 
     } catch (Exception e) {
       return databaseError(e, "updating fee");
@@ -237,9 +234,7 @@ public class FeeServiceImpl implements FeeService {
                     .then(successResponse(null, "Fee deleted successfully")))
         .switchIfEmpty(
             customError(
-                ErrorCode.FEE_NOT_FOUND,
-                "Fee not found with ID: " + id,
-                org.springframework.http.HttpStatus.NOT_FOUND))
+                ErrorCode.FEE_NOT_FOUND, "Fee not found with ID: " + id, HttpStatus.NOT_FOUND))
         .onErrorResume(e -> databaseError(e, "deleting fee"));
   }
 
@@ -303,7 +298,7 @@ public class FeeServiceImpl implements FeeService {
                                     + validationCurrency
                                     + " is not supported by PSPs: "
                                     + String.join(", ", unsupportedPsps),
-                                org.springframework.http.HttpStatus.BAD_REQUEST));
+                                HttpStatus.BAD_REQUEST));
               }
 
               if ("create".equals(operation)) {
