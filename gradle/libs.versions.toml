@@ -4,6 +4,7 @@
 # =============================================================================
 spring-boot = "3.5.4"
 spring-dependency-management = "1.1.6"
+jobrunr = "6.3.0"
 
 # =============================================================================
 # DATABASE VERSIONS
@@ -37,6 +38,10 @@ spring-boot-starter-validation = { group = "org.springframework.boot", name = "s
 spring-boot-starter-webflux = { group = "org.springframework.boot", name = "spring-boot-starter-webflux" }
 spring-boot-starter-oauth2-resource-server = { group = "org.springframework.boot", name = "spring-boot-starter-oauth2-resource-server" }
 spring-boot-starter-oauth2-client = { group = "org.springframework.boot", name = "spring-boot-starter-oauth2-client" }
+spring-boot-starter-jdbc = { group = "org.springframework.boot", name = "spring-boot-starter-jdbc" }
+
+# JobRunr
+jobrunr-spring-boot-starter = { group = "org.jobrunr", name = "jobrunr-spring-boot-3-starter", version.ref = "jobrunr" }
 
 # =============================================================================
 # JSON PROCESSING (Managed by Spring Boot BOM)
