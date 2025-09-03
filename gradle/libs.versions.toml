@@ -8,3 +8,13 @@ junit-jupiter = "5.10.1"
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+# Spring Boot managed dependencies (versions provided by Spring Boot BOM)
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+postgresql = { module = "org.postgresql:postgresql" }
+h2 = { module = "com.h2database:h2" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version = "3.3.4" }
+spring-dependency-management = { id = "io.spring.dependency-management", version = "1.1.6" }
