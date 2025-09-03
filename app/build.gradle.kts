@@ -6,38 +6,35 @@
  */
 
 plugins {
-    // Apply the application plugin to add support for building a CLI application in Java.
-    application
+	alias(libs.plugins.spring.boot)
+	alias(libs.plugins.spring.dependency.management)
+	java
 }
 
 repositories {
-    // Use Maven Central for resolving dependencies.
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-    // Use JUnit Jupiter for testing.
-    testImplementation(libs.junit.jupiter)
+	implementation(libs.spring.boot.starter.web)
+	implementation(libs.spring.boot.starter.jdbc)
+	runtimeOnly(libs.postgresql)
+	runtimeOnly(libs.h2)
 
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-    // This dependency is used by the application.
-    implementation(libs.guava)
+	testImplementation(libs.spring.boot.starter.test)
 }
 
-// Apply a specific Java toolchain to ease working on different environments.
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
 }
 
-application {
-    // Define the main class for the application.
-    mainClass = "org.example.App"
+// Set the main class explicitly for clarity
+springBoot {
+	mainClass.set("com.nexxus.NexxusBackendApplication")
 }
 
 tasks.named<Test>("test") {
-    // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
+	useJUnitPlatform()
 }
