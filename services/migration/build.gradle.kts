@@ -1,19 +1,17 @@
 plugins {
+	java
 	alias(libs.plugins.spring.boot)
 	alias(libs.plugins.spring.dependency.management)
-	alias(libs.plugins.spotless)
-	java
+}
+
+// Disable bootJar for migration service
+tasks.bootJar {
+	enabled = false
 }
 
 dependencies {
-	implementation(project(":libs:shared"))
-	
-	implementation(libs.bundles.spring.boot.web)
+	implementation(libs.bundles.database)
 	
 	compileOnly(libs.bundles.development)
 	annotationProcessor(libs.bundles.development)
-}
-
-springBoot {
-	mainClass.set("nexxus.NexxusBackendApplication")
 }

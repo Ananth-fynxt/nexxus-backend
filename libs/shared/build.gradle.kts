@@ -1,10 +1,17 @@
 plugins {
-    java
-    alias(libs.plugins.spring.dependency.management)
+	java
+	alias(libs.plugins.spring.boot)
+	alias(libs.plugins.spring.dependency.management)
+}
+
+// Disable bootJar for shared library
+tasks.bootJar {
+	enabled = false
 }
 
 dependencies {
-    implementation(libs.spring.boot.starter.jdbc)
-    runtimeOnly(libs.postgresql)
-    runtimeOnly(libs.h2)
+	implementation(libs.bundles.database)
+	
+	compileOnly(libs.bundles.development)
+	annotationProcessor(libs.bundles.development)
 }

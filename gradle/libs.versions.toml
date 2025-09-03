@@ -2,28 +2,66 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-guava = "32.1.3-jre"
-spring-boot = "3.3.4"
+# =============================================================================
+# CORE FRAMEWORK VERSIONS
+# =============================================================================
+spring-boot = "3.5.4"
 spring-dependency-management = "1.1.6"
-spotless = "6.25.0"
-json-schema-validator = "2.2.14"
+
+# =============================================================================
+# DATABASE VERSIONS
+# =============================================================================
+postgresql = "42.7.2"
+
+# =============================================================================
+# DEVELOPMENT TOOLS VERSIONS
+# =============================================================================
 lombok = "1.18.30"
+spotless = "6.25.0"
 
 [libraries]
-guava = { module = "com.google.guava:guava", version.ref = "guava" }
-spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
-spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "spring-boot" }
-spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
-postgresql = { module = "org.postgresql:postgresql" }
-h2 = { module = "com.h2database:h2" }
+# =============================================================================
+# SPRING BOOT STARTERS (Versions managed by BOM)
+# =============================================================================
+spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+spring-boot-starter-jdbc = { group = "org.springframework.boot", name = "spring-boot-starter-jdbc" }
 
-[plugins]
-spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
-spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
-spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+# =============================================================================
+# DATABASE DEPENDENCIES (Versions managed by version.ref)
+# =============================================================================
+postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgresql" }
 
-json-schema-validator = { group = "com.github.java-json-tools", name = "json-schema-validator", version.ref = "json-schema-validator" }
+# =============================================================================
+# DEVELOPMENT TOOLS (Versions managed by version.ref)
+# =============================================================================
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 
+# =============================================================================
+# GRADLE PLUGINS (Versions managed by version.ref)
+# =============================================================================
+spotless-plugin-gradle = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
+spring-boot-gradle-plugin = { group = "org.springframework.boot", name = "org.springframework.boot.gradle.plugin", version.ref = "spring-boot" }
+
+[plugins]
+# =============================================================================
+# GRADLE PLUGINS
+# =============================================================================
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+
+[bundles]
+# =============================================================================
+# SPRING BOOT BUNDLES (Versions managed by BOM)
+# =============================================================================
+spring-boot-web = ["spring-boot-starter-web"]
+
+# =============================================================================
+# DATABASE BUNDLES (Versions managed by version.ref)
+# =============================================================================
+database = ["spring-boot-starter-jdbc", "postgresql"]
+
+# =============================================================================
+# DEVELOPMENT BUNDLES (Versions managed by version.ref)
+# =============================================================================
 development = ["lombok"]
-validation = ["json-schema-validator"]
