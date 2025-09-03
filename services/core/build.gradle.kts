@@ -17,4 +17,5 @@ dependencies {
     
     // Project modules
     implementation(project(":libs:shared"))
+    implementation(project(":libs:integration:cron"))
 }

@@ -10,6 +10,10 @@ spring:
   config:
     import:
       - optional:classpath:/application-common.yml
+  r2dbc:
+    url: ${SPRING_R2DBC_URL:r2dbc:postgresql://localhost:5432/exxus_core}
+    username: ${SPRING_R2DBC_USERNAME:exxus}
+    password: ${SPRING_R2DBC_PASSWORD:secret}
 
 # Management Configuration (Core service specific)
 management:
@@ -20,3 +24,14 @@ management:
   endpoint:
     health:
       show-details: ${MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS}
+
+org:
+  jobrunr:
+    background-job-server:
+      enabled: false
+    dashboard:
+      enabled: false
+
+exxus:
+  scheduler:
+    base-url: ${EXXUS_SCHEDULER_BASE_URL:http://localhost:8081}
