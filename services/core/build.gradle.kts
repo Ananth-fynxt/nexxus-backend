@@ -9,6 +9,8 @@ dependencies {
     // Spring Boot starters (versions managed by BOM)
     implementation(libs.bundles.spring.boot.web)
     implementation(libs.bundles.database)
+    implementation(libs.spring.boot.starter.jdbc)
+    runtimeOnly(libs.mysql.connector.j)
     
     // Development Tools
     implementation(libs.lombok)
