@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = "nexxus-backend"
-include("app")
+include("services:core")
