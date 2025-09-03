@@ -30,6 +30,7 @@ spring-doc = "2.8.8"
 # SPRING BOOT BOM & STARTERS (Versions managed by BOM)
 # =============================================================================
 spring-boot-bom = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
+spring-boot-starter-jdbc = { group = "org.springframework.boot", name = "spring-boot-starter-jdbc" }
 spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
 spring-boot-starter-data-r2dbc = { group = "org.springframework.boot", name = "spring-boot-starter-data-r2dbc" }
 spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
@@ -59,6 +60,7 @@ auth0-java-jwt = { group = "com.auth0", name = "java-jwt", version.ref = "auth0-
 # =============================================================================
 postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgresql" }
 r2dbc-postgresql = { group = "org.postgresql", name = "r2dbc-postgresql", version.ref = "r2dbc-postgresql" }
+mysql-connector-j = { group = "com.mysql", name = "mysql-connector-j" }
 
 # =============================================================================
 # DATABASE MIGRATION (Versions managed by version.ref)
@@ -106,7 +108,7 @@ auth0 = ["auth0-java-jwt"]
 # =============================================================================
 # DATABASE BUNDLES (Versions managed by version.ref)
 # =============================================================================
-database = ["spring-boot-starter-data-r2dbc", "postgresql", "r2dbc-postgresql"]
+database = ["spring-boot-starter-data-r2dbc", "postgresql", "r2dbc-postgresql", "spring-boot-starter-jdbc", "mysql-connector-j"]
 flyway = ["flyway-core", "flyway-database-postgresql"]
 
 # =============================================================================
