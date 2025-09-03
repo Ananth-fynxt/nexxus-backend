@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: user-service
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_URI}
+      profile: ${SPRING_PROFILES_ACTIVE}
+      label: ${CONFIG_GIT_LABEL}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE}
+

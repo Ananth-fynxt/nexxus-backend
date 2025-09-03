@@ -1,0 +1,9 @@
+CREATE USER "user" WITH PASSWORD 'password';
+CREATE USER "order" WITH PASSWORD 'password';
+
+CREATE DATABASE userdb OWNER "user";
+CREATE DATABASE orderdb OWNER "order";
+
+GRANT ALL PRIVILEGES ON DATABASE userdb TO "user";
+GRANT ALL PRIVILEGES ON DATABASE orderdb TO "order";
+
