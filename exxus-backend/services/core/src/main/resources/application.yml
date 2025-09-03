@@ -1,0 +1,17 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/exxus_core
+    username: exxus
+    password: secret
+
+org:
+  jobrunr:
+    background-job-server:
+      enabled: false
+    dashboard:
+      enabled: false
+
+exxus:
+  scheduler:
+    base-url: http://localhost:8081
+
