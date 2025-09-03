@@ -12,7 +12,21 @@ spring:
       max-size: ${CONNECTION_POOL_MAXIMUM_POOL_SIZE}
       max-idle-time: ${CONNECTION_POOL_IDLE_TIMEOUT}
       max-acquire-time: ${CONNECTION_POOL_CONNECTION_TIMEOUT}
-      
+  
+  # JDBC DataSource Configuration
+  datasource:
+    url: ${DATABASE_JDBC_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  
+  # HikariCP Settings
+  hikari:
+    maximum-pool-size: ${CONNECTION_POOL_MAXIMUM_POOL_SIZE}
+    minimum-idle: ${CONNECTION_POOL_MINIMUM_IDLE}
+    connection-timeout: ${CONNECTION_POOL_CONNECTION_TIMEOUT}
+    idle-timeout: ${CONNECTION_POOL_IDLE_TIMEOUT}
+    max-lifetime: ${CONNECTION_POOL_MAX_LIFETIME}
+
   # Netty Configuration (basic optimizations)
   reactor:
     netty:

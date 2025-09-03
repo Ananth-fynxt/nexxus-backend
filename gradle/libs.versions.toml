@@ -32,6 +32,7 @@ spring-doc = "2.8.8"
 spring-boot-bom = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
 spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
 spring-boot-starter-data-r2dbc = { group = "org.springframework.boot", name = "spring-boot-starter-data-r2dbc" }
+spring-boot-starter-jdbc = { group = "org.springframework.boot", name = "spring-boot-starter-jdbc" }
 spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
 spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
 spring-boot-starter-webflux = { group = "org.springframework.boot", name = "spring-boot-starter-webflux" }
@@ -106,7 +107,7 @@ auth0 = ["auth0-java-jwt"]
 # =============================================================================
 # DATABASE BUNDLES (Versions managed by version.ref)
 # =============================================================================
-database = ["spring-boot-starter-data-r2dbc", "postgresql", "r2dbc-postgresql"]
+database = ["spring-boot-starter-data-r2dbc", "spring-boot-starter-jdbc", "postgresql", "r2dbc-postgresql"]
 flyway = ["flyway-core", "flyway-database-postgresql"]
 
 # =============================================================================
