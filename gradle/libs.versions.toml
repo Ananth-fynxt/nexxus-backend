@@ -4,6 +4,7 @@
 # =============================================================================
 spring-boot = "3.5.4"
 spring-dependency-management = "1.1.6"
+jobrunr = "6.3.3"
 
 # =============================================================================
 # DATABASE VERSIONS
@@ -59,6 +60,7 @@ auth0-java-jwt = { group = "com.auth0", name = "java-jwt", version.ref = "auth0-
 # =============================================================================
 postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgresql" }
 r2dbc-postgresql = { group = "org.postgresql", name = "r2dbc-postgresql", version.ref = "r2dbc-postgresql" }
+jobrunr-starter = { group = "org.jobrunr", name = "jobrunr-spring-boot-3-starter", version.ref = "jobrunr" }
 
 # =============================================================================
 # DATABASE MIGRATION (Versions managed by version.ref)

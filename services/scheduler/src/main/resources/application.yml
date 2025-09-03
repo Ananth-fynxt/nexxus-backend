@@ -1,0 +1,19 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: scheduler
+  datasource:
+    url: jdbc:postgresql://localhost:5432/exxus_jobs
+    username: exxus
+    password: secret
+
+org:
+  jobrunr:
+    background-job-server:
+      enabled: true
+    dashboard:
+      enabled: true
+      port: 8000
+
