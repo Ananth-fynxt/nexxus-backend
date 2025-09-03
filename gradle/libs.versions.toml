@@ -3,18 +3,27 @@
 
 [versions]
 guava = "32.1.3-jre"
-junit-jupiter = "5.10.1"
+spring-boot = "3.3.4"
+spring-dependency-management = "1.1.6"
+spotless = "6.25.0"
+json-schema-validator = "2.2.14"
+lombok = "1.18.30"
 
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
-# Spring Boot managed dependencies (versions provided by Spring Boot BOM)
-spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
-spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
-spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
+spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "spring-boot" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
 postgresql = { module = "org.postgresql:postgresql" }
 h2 = { module = "com.h2database:h2" }
 
 [plugins]
-spring-boot = { id = "org.springframework.boot", version = "3.3.4" }
-spring-dependency-management = { id = "io.spring.dependency-management", version = "1.1.6" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+
+json-schema-validator = { group = "com.github.java-json-tools", name = "json-schema-validator", version.ref = "json-schema-validator" }
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
+
+development = ["lombok"]
+validation = ["json-schema-validator"]
